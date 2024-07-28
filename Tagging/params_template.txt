@@ -1,0 +1,24 @@
+# location of Python virtual environment with OCI CLI installation
+OCICLI_DIR="<path to virtual environment>"
+
+COMPARTMENT_ID="ocid1.compartment.oc1..."
+
+# DB System
+DISPLAY_NAME="TaggingTest"
+
+# resource types to precess in bulk tagging
+#RESOURCES_TO_PROCESS="all"
+RESOURCES_TO_PROCESS="instance,vnic"
+#RESOURCES_TO_PROCESS="instance,autonomousdatabase,dbsystem,subnet"
+
+# resource list directory for bulk tag update
+RESOURCE_LIST_DIR="/home/opc/Tagging/resource-list/${COMPARTMENT_ID}"
+# resource list file name for bulk tag update
+RESOURCE_LIST_FILE_NAME="resource-list.json"
+
+# directory to save defined tags in
+# the directory is created with mkdir -p
+TAG_DIRECTORY="/home/opc/Tagging/saved-defined-tags/${COMPARTMENT_ID}"
+
+# operations file for bulk edit
+OPERATIONS_FILE="operations.json"

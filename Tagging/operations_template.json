@@ -1,0 +1,16 @@
+[
+  {
+    "defined-tags": {
+      "My_System_Tag": {
+        "createdBy": "john.doe@acme.com"
+      },
+      "ResourceControl": {
+        "dns": "true",
+        "keepup": "false",
+        "notification": "true",
+        "schedule": "false"
+      }
+    },
+    "operationType": "ADD_OR_SET"
+  }
+]
