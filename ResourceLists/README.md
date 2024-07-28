@@ -16,4 +16,4 @@ Usage:
 
 ```
 ### userresources.bash
-The script assumes resources created by a user are identified by defined tags. Set the values for `TAG_NAMESPACE`, `TAG_KEY` and `USER` in the script.
+The script assumes resources created by a user are identified by defined tags. Set the values for `TAG_NAMESPACE`, `TAG_KEY` and `USER` in the script. A single command line parameter overrides the value for `USER`.
