@@ -15,3 +15,5 @@ Usage:
   https://docs.oracle.com/en-us/iaas/Content/Search/Concepts/queryoverview.htm#resourcetypes
 
 ```
+### userresources.bash
+The script assumes resources created by a user are identified by defined tags. Set the values for `TAG_NAMESPACE`, `TAG_KEY` and `USER` in the script.
