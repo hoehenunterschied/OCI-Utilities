@@ -5,7 +5,7 @@ COMPARTMENT_NAME="<insert a compartment name here>"
 
 # search restricted to resource types
 # https://docs.oracle.com/en-us/iaas/Content/Search/Concepts/queryoverview.htm#resourcetypes
-RESOURCE_TYPE_LIST="instance,autonomousdatabase,dbsystem"
+RESOURCE_TYPE_LIST="instance,autonomousdatabase"
 
 # select values that identify resources created by yourself
 TAG_NAMESPACE="<insert a tag namespace here>"
