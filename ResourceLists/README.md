@@ -16,4 +16,4 @@ Usage:
 
 ```
 ### userresources.bash
-The script assumes resources created by a user are identified by defined tags. Set the values for `TAG_NAMESPACE`, `TAG_KEY` and `USER` in the script. A single command line parameter overrides the value for `USER`.
+The script assumes resources created by a user are identified by defined tags. Set the values for `TAG_NAMESPACE`, `TAG_KEY` and `USER` in the script. A single command line parameter overrides the value for `USER`. The value of `USER` is appended to the string `oracleidentitycloudservice/` to form the tag key value the script is searching for. If this does not apply in your environment, change the script.
