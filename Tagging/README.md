@@ -16,4 +16,4 @@ In its current form the script bulk updates all resources of the specified types
 ### db-system-vnic-tag.bash
 Used to demonstrate the unmutable defined tags of a vnic that has been created as part of database provisioning. Provision a new demo database of the Base Database Service and set its `DISPLAY_NAME` and `COMPARTMENT_ID` in params.txt. Make sure the database is provisionied with some defined tags at the time of provisioning. The script displays the defined tags of the the database system and the vnic, then removes the defined tags from the databse. This change of defined tags is not propagated to the vnic. When trying to change the defined tags of the vnic, an error message is displayed.
 ### work-request.bash
-Display the tagging work request given as command line parameter. When the parameter is omitted, the most recent accepted tagging work request.
+Display the tagging work request given as command line parameter. When the parameter is omitted, the most recent accepted tagging work request is shown.
