@@ -117,14 +117,27 @@ for ocid in "${OCID_LIST[@]}"; do
 
   if [ -f "${TAG_DIRECTORY}/${ocid}" ]; then
 
-    # restore defined tags from backup
-    OUTPUT=$(oci ${OCICLI_PART} ${ocid} --force --defined-tags file://"${TAG_DIRECTORY}/${ocid}" 2>&1)
+    #ACTION="SET_TO_EMPTY_VALUE"
+    #ACTION="SET_ALL_THE_SAME"
+    ACTION="SET_FROM_BACKUP"
+    case "${ACTION}" in
+      SET_FROM_BACKUP)
+        # restore defined tags from backup
+        OUTPUT=$(oci ${OCICLI_PART} ${ocid} --force --defined-tags file://"${TAG_DIRECTORY}/${ocid}" 2>&1)
+        ;;
 
-    # remove defined tags
-    #OUTPUT=$(oci ${OCICLI_PART} ${ocid} --force --defined-tags "{}" 2>&1)
+      SET_TO_EMPTY_VALUE)
+        # remove defined tags
+        OUTPUT=$(oci ${OCICLI_PART} ${ocid} --force --defined-tags "{}" 2>&1)
+        ;;
 
-    # set all resources to the same defined tags
-    #OUTPUT=$(oci ${OCICLI_PART} ${ocid} --force --defined-tags file://./default-tags.json 2>&1)
+      SET_ALL_THE_SAME)
+        # set all resources to the same defined tags
+        OUTPUT=$(oci ${OCICLI_PART} ${ocid} --force --defined-tags file://./default-tags.json 2>&1)
+        ;;
+      *)
+        echo -e "\n###\n### unknown action $ACTION.\n### exiting.\n###"
+    esac
 
     if [[ $? -eq 0 ]]; then
       echo "    restored tags of $ocid"
