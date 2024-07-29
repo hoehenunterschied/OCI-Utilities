@@ -87,6 +87,8 @@ TMP_LIST=$(oci search resource structured-search \
   --raw-output \
   --query "join(' ', sort_by(data.items, &\"resource-type\")[].identifier)")
 OCID_LIST=($(echo $TMP_LIST))
+# alternative, but depends on jq
+#OCID_LIST=($(jq --raw-output ".[].id" resource-list.json))
 
 # if ACTION is already set, do not change value
 #ACTION="${ACTION:=SET_TO_EMPTY_VALUE}"
@@ -100,7 +102,6 @@ case "${ACTION}" in
     exit
 esac
 
-#OCID_LIST=($(jq --raw-output ".[].id" resource-list.json))
 for ocid in "${OCID_LIST[@]}"; do
   case $ocid in
     ocid1.instance.*)
