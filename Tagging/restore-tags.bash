@@ -94,8 +94,14 @@ for ocid in "${OCID_LIST[@]}"; do
     ocid1.instance.*)
       OCICLI_PART="compute instance update --instance-id"
       ;;
+    ocid1.bootvolume.*)
+      OCICLI_PART="bv boot-volume update --boot-volume-id"
+      ;;
     ocid1.vnic.*)
       OCICLI_PART="network vnic update --vnic-id"
+      ;;
+    ocid1.subnet.*)
+      OCICLI_PART="network subnet update --vnic-id"
       ;;
     ocid1.dbsystem.*)
       OCICLI_PART="db system update --db-system-id"
@@ -112,6 +118,7 @@ for ocid in "${OCID_LIST[@]}"; do
   if [ -f "${TAG_DIRECTORY}/${ocid}" ]; then
     echo "    restoring tags of $ocid"
     oci ${OCICLI_PART} ${ocid} --force --defined-tags file://"${TAG_DIRECTORY}/${ocid}" > /dev/null
+    #oci ${OCICLI_PART} ${ocid} --force --defined-tags "{}" > /dev/null
   else
     echo "### ERROR: did not find tag backup for $ocid"
   fi

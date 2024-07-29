@@ -84,8 +84,14 @@ for ocid in "${OCID_LIST[@]}"; do
     ocid1.instance.*)
       OCICLI_PART="compute instance get --instance-id"
       ;;
+    ocid1.bootvolume.*)
+      OCICLI_PART="bv boot-volume get --boot-volume-id"
+      ;;
     ocid1.vnic.*)
       OCICLI_PART="network vnic get --vnic-id"
+      ;;
+    ocid1.subnet.*)
+      OCICLI_PART="network subnet get --vnic-id"
       ;;
     ocid1.dbsystem.*)
       OCICLI_PART="db system get --db-system-id"
