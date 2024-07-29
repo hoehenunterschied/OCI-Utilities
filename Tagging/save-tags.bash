@@ -100,12 +100,20 @@ for ocid in "${OCID_LIST[@]}"; do
       OCICLI_PART="db autonomous-database get --autonomous-database-id"
       ;;
     *)
-      echo -en "\ncan't process $ocid"
-      NEEDCR="\\n"
+      ### dot-printing-only echo -en "\ncan't process $ocid"
+      ### dot-printing-only NEEDCR="\\n"
+      echo -e "--> ERROR: resource type not supported for $ocid"
       continue
   esac
-  echo -en "${NEEDCR}."
-  NEEDCR=""
+  ### dot-printing-only echo -en "${NEEDCR}."
+  ### dot-printing-only NEEDCR=""
   oci ${OCICLI_PART} ${ocid} --query "data.\"defined-tags\"" > "${TAG_DIRECTORY}/${ocid}"
+  if [[ $? -eq 0 ]]; then
+    echo -e "    saved Defined Tags for $ocid"
+  else
+    echo -e ">>>>\n--> ERROR processing $ocid"
+    oci ${OCICLI_PART} ${ocid} --query "data.\"defined-tags\""
+    echo -e "<<<<"
+  fi
 done
-echo ""
+### dot-printing-only echo ""
