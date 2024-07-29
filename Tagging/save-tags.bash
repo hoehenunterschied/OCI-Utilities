@@ -111,6 +111,7 @@ for ocid in "${OCID_LIST[@]}"; do
   if [[ $? -eq 0 ]]; then
     echo -e "    saved Defined Tags for $ocid"
   else
+    rm -f "${TAG_DIRECTORY}/${ocid}"
     echo -e ">>>>\n--> ERROR processing $ocid"
     oci ${OCICLI_PART} ${ocid} --query "data.\"defined-tags\""
     echo -e "<<<<"
