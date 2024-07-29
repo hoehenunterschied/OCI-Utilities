@@ -107,14 +107,13 @@ for ocid in "${OCID_LIST[@]}"; do
   esac
   ### dot-printing-only echo -en "${NEEDCR}."
   ### dot-printing-only NEEDCR=""
-  oci ${OCICLI_PART} ${ocid} --query "data.\"defined-tags\"" > "${TAG_DIRECTORY}/${ocid}"
-  if [[ $? -eq 0 ]]; then
+  if oci ${OCICLI_PART} ${ocid} --query "data.\"defined-tags\"" > "${TAG_DIRECTORY}/${ocid}"; then
     echo -e "    saved Defined Tags for $ocid"
   else
     rm -f "${TAG_DIRECTORY}/${ocid}"
-    echo -e ">>>>\n--> ERROR processing $ocid"
+    echo -e ">>>>>>\n--> ERROR processing $ocid"
     oci ${OCICLI_PART} ${ocid} --query "data.\"defined-tags\""
-    echo -e "<<<<"
+    echo -e "<<<<<<"
   fi
 done
 ### dot-printing-only echo ""

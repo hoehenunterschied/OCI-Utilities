@@ -101,7 +101,7 @@ for ocid in "${OCID_LIST[@]}"; do
       OCICLI_PART="network vnic update --vnic-id"
       ;;
     ocid1.subnet.*)
-      OCICLI_PART="network subnet update --vnic-id"
+      OCICLI_PART="network subnet update --subnet-id"
       ;;
     ocid1.dbsystem.*)
       OCICLI_PART="db system update --db-system-id"
@@ -116,9 +116,21 @@ for ocid in "${OCID_LIST[@]}"; do
   #oci ${OCICLI_PART} ${ocid} --query "data.\"defined-tags\"" > "${TAG_DIRECTORY}/${ocid}"
 
   if [ -f "${TAG_DIRECTORY}/${ocid}" ]; then
-    echo "    restoring tags of $ocid"
-    oci ${OCICLI_PART} ${ocid} --force --defined-tags file://"${TAG_DIRECTORY}/${ocid}" > /dev/null
-    #oci ${OCICLI_PART} ${ocid} --force --defined-tags "{}" > /dev/null
+
+    # restore defined tags from backup
+    OUTPUT=$(oci ${OCICLI_PART} ${ocid} --force --defined-tags file://"${TAG_DIRECTORY}/${ocid}" 2>&1)
+
+    # remove defined tags
+    #OUTPUT=$(oci ${OCICLI_PART} ${ocid} --force --defined-tags "{}" 2>&1)
+
+    # set all resources to the same defined tags
+    #OUTPUT=$(oci ${OCICLI_PART} ${ocid} --force --defined-tags file://./default-tags.json 2>&1)
+
+    if [[ $? -eq 0 ]]; then
+      echo "    restored tags of $ocid"
+    else
+      echo -e ">>>>>>\n--> ERROR processing $ocid\n$OUTPUT\n<<<<<<"
+    fi
   else
     echo "### ERROR: did not find tag backup for $ocid"
   fi
