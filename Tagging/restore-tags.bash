@@ -88,6 +88,18 @@ TMP_LIST=$(oci search resource structured-search \
   --query "join(' ', sort_by(data.items, &\"resource-type\")[].identifier)")
 OCID_LIST=($(echo $TMP_LIST))
 
+# if ACTION is already set, do not change value
+#ACTION="${ACTION:=SET_TO_EMPTY_VALUE}"
+#ACTION="${ACTION:=SET_ALL_THE_SAME}"
+ACTION="${ACTION:=SET_FROM_BACKUP}"
+case "${ACTION}" in
+  SET_FROM_BACKUP | SET_TO_EMPTY_VALUE | SET_ALL_THE_SAME)
+    ;;
+  *)
+    echo -e "\n###\n### unknown action $ACTION.\n### exiting.\n###"
+    exit
+esac
+
 #OCID_LIST=($(jq --raw-output ".[].id" resource-list.json))
 for ocid in "${OCID_LIST[@]}"; do
   case $ocid in
@@ -117,9 +129,6 @@ for ocid in "${OCID_LIST[@]}"; do
 
   if [ -f "${TAG_DIRECTORY}/${ocid}" ]; then
 
-    #ACTION="SET_TO_EMPTY_VALUE"
-    #ACTION="SET_ALL_THE_SAME"
-    ACTION="SET_FROM_BACKUP"
     case "${ACTION}" in
       SET_FROM_BACKUP)
         # restore defined tags from backup
@@ -137,6 +146,7 @@ for ocid in "${OCID_LIST[@]}"; do
         ;;
       *)
         echo -e "\n###\n### unknown action $ACTION.\n### exiting.\n###"
+        exit
     esac
 
     if [[ $? -eq 0 ]]; then
