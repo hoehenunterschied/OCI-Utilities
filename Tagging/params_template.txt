@@ -9,7 +9,8 @@ DISPLAY_NAME="TaggingTest"
 # resource types to precess in bulk tagging
 #RESOURCES_TO_PROCESS="all"
 RESOURCES_TO_PROCESS="instance,vnic"
-#RESOURCES_TO_PROCESS="instance,autonomousdatabase,dbsystem,subnet"
+RESOURCES_TO_PROCESS="instance,bootvolume,subnet,dbsystem,autonomousdatabase"
+#RESOURCES_TO_PROCESS="instance,bootvolume,vnic,subnet,dbsystem,autonomousdatabase"
 
 # resource list directory for bulk tag update
 RESOURCE_LIST_DIR="/home/opc/Tagging/resource-list/${COMPARTMENT_ID}"
@@ -22,3 +23,6 @@ TAG_DIRECTORY="/home/opc/Tagging/saved-defined-tags/${COMPARTMENT_ID}"
 
 # operations file for bulk edit
 OPERATIONS_FILE="operations.json"
+
+# defined tags for --defined-tags file://"${DEFINED_TAGS_FILE}"
+DEFINED_TAGS_FILE="./defined-tags.json"
