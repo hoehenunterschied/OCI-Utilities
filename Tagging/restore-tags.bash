@@ -70,6 +70,15 @@ for dir in "${CHECK_DIRS[@]}"; do
   fi
 done
 
+CHECK_FILES=()
+CHECK_FILES+=("${DEFINED_TAGS_FILE}")
+for file in "${CHECK_FILES[@]}"; do
+  if [ ! -f "${file}" ]; then
+    echo -e "\n### parameter file \"${file}\" not found. Exiting.\n"
+    exit
+  fi
+done
+
 ## create resource list for bulk tag update
 #oci search resource structured-search \
 #  --query-text "query ${RESOURCES_TO_PROCESS} resources
@@ -95,7 +104,14 @@ OCID_LIST=($(echo $TMP_LIST))
 #ACTION="${ACTION:=SET_ALL_THE_SAME}"
 ACTION="${ACTION:=SET_FROM_BACKUP}"
 case "${ACTION}" in
-  SET_FROM_BACKUP | SET_TO_EMPTY_VALUE | SET_ALL_THE_SAME)
+  SET_FROM_BACKUP)
+    echo "restoring defined tags from backup directory ${TAG_DIRECTORY}"
+    ;;
+  SET_TO_EMPTY_VALUE)
+    echo "setting defined tags to \"{}\""
+    ;;
+  SET_ALL_THE_SAME)
+    echo "setting all defined tags from ${DEFINED_TAGS_FILE}"
     ;;
   *)
     echo -e "\n###\n### unknown action $ACTION.\n### exiting.\n###"
@@ -143,7 +159,7 @@ for ocid in "${OCID_LIST[@]}"; do
 
       SET_ALL_THE_SAME)
         # set all resources to the same defined tags
-        OUTPUT=$(oci ${OCICLI_PART} ${ocid} --force --defined-tags file://./default-tags.json 2>&1)
+        OUTPUT=$(oci ${OCICLI_PART} ${ocid} --force --defined-tags file://"${DEFINED_TAGS_FILE}" 2>&1)
         ;;
       *)
         echo -e "\n###\n### unknown action $ACTION.\n### exiting.\n###"
