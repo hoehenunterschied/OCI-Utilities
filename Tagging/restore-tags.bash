@@ -85,7 +85,7 @@ TMP_LIST=$(oci search resource structured-search \
                    where compartmentID='${COMPARTMENT_ID}'
                          && lifecycleState!='TERMINATED'" \
   --raw-output \
-  --query "join(' 'data.items[].identifier)")
+  --query "join(' ', sort_by(data.items, &\"resource-type\")[].identifier)")
 OCID_LIST=($(echo $TMP_LIST))
 
 #OCID_LIST=($(jq --raw-output ".[].id" resource-list.json))

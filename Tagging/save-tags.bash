@@ -75,7 +75,7 @@ TMP_LIST=$(oci search resource structured-search \
                    where compartmentID='${COMPARTMENT_ID}'
                          && lifecycleState!='TERMINATED'" \
   --raw-output \
-  --query "join(' 'data.items[].identifier)")
+  --query "join(' ', sort_by(data.items, &\"resource-type\")[].identifier)")
 OCID_LIST=($(echo $TMP_LIST))
 
 #OCID_LIST=($(jq --raw-output ".[].id" resource-list.json))
@@ -91,7 +91,7 @@ for ocid in "${OCID_LIST[@]}"; do
       OCICLI_PART="network vnic get --vnic-id"
       ;;
     ocid1.subnet.*)
-      OCICLI_PART="network subnet get --vnic-id"
+      OCICLI_PART="network subnet get --subnet-id"
       ;;
     ocid1.dbsystem.*)
       OCICLI_PART="db system get --db-system-id"
