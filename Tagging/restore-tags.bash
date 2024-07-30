@@ -106,12 +106,15 @@ ACTION="${ACTION:=SET_FROM_BACKUP}"
 case "${ACTION}" in
   SET_FROM_BACKUP)
     echo "restoring defined tags from backup directory ${TAG_DIRECTORY}"
+    TAG_ARGUMENT="file://\"\${TAG_DIRECTORY}/\${ocid}\""
     ;;
   SET_TO_EMPTY_VALUE)
     echo "setting defined tags to \"{}\""
+    TAG_ARGUMENT="\"{}\""
     ;;
   SET_ALL_THE_SAME)
     echo "setting all defined tags from ${DEFINED_TAGS_FILE}"
+    TAG_ARGUMENT="file://\"\${DEFINED_TAGS_FILE}\""
     ;;
   *)
     echo -e "\n###\n### unknown action $ACTION.\n### exiting.\n###"
@@ -144,28 +147,9 @@ for ocid in "${OCID_LIST[@]}"; do
   esac
   #oci ${OCICLI_PART} ${ocid} --query "data.\"defined-tags\"" > "${TAG_DIRECTORY}/${ocid}"
 
+  # only change tags if backup file exists
   if [ -f "${TAG_DIRECTORY}/${ocid}" ]; then
-
-    case "${ACTION}" in
-      SET_FROM_BACKUP)
-        # restore defined tags from backup
-        OUTPUT=$(oci ${OCICLI_PART} ${ocid} --force --defined-tags file://"${TAG_DIRECTORY}/${ocid}" 2>&1)
-        ;;
-
-      SET_TO_EMPTY_VALUE)
-        # remove defined tags
-        OUTPUT=$(oci ${OCICLI_PART} ${ocid} --force --defined-tags "{}" 2>&1)
-        ;;
-
-      SET_ALL_THE_SAME)
-        # set all resources to the same defined tags
-        OUTPUT=$(oci ${OCICLI_PART} ${ocid} --force --defined-tags file://"${DEFINED_TAGS_FILE}" 2>&1)
-        ;;
-      *)
-        echo -e "\n###\n### unknown action $ACTION.\n### exiting.\n###"
-        exit
-    esac
-
+    OUTPUT=$(eval oci ${OCICLI_PART} ${ocid} --force --defined-tags ${TAG_ARGUMENT} 2>&1)
     if [[ $? -eq 0 ]]; then
       echo "    restored tags of $ocid"
     else
