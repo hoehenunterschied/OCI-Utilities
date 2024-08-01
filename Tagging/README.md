@@ -11,6 +11,16 @@ All scripts use OCI CLI. A section of the scripts tries to activate a Python vir
 The script works on compartment level. Structured search is used to retrieve a list of OCI resources of resource types as defined by `RESOURCES_TO_PROCESS` in params.txt. The OCID of the resource is used as the filename to store the defined tags of the resource. The location of the created files is defined by `RESOURCE_LIST_DIR`in params.txt. The path definition of `RESOURCE_LIST_DIR` in `params_template.txt` ends with the compartment ocid as name of the subdirectory to write files into.
 ### restore-tags.bash
 When defined tag information has been saved by using `save-tags.bash`, this script can write back the saved defined tags to the resources. Note that tags for some resources can't be changed after their creation. Vnics of databases inherit the defined tags of the dbsystem or autonomous-database at the time of provisioning. Changing the tags of a dbsystem or autonomous-database does not propagate the change to the vnic. When the defined tags of a resource can't be updated, the error message is displayed and the script continues to process the next resource.
+Besides restoring defined tags of a resource from a backup, the script can also remove defined tags from resources or apply the same defined tags as defined in the file DEFINED_TAGS_FILE (specified in params.txt). It is mandatory to run save-tags.bash first, because the script does not change resources when the backup file of its defined tags is not found.
+```
+Usage:
+======
+
+       restore defined tags from backup : restore-tags.bash restore
+                    remove defined tags : restore-tags.bash clear
+   apply same defined tags to resources : restore-tags.bash fromfile
+```
+
 ### bulk-apply-tags.bash
 In its current form the script bulk updates all resources of the specified types (see `RESOURCES_TO_PROCESS` in params_template.txt) in the compartment given by `COMPARTMENT_ID` to the same set of defined tags. Either change the structured search which is used in the script to generate the list of resources to change, or edit the generated resource list before bulk applying the defined tags to limit which resources are updated.
 ### db-system-vnic-tag.bash

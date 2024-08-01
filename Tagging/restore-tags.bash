@@ -10,6 +10,7 @@ OCIOPTIONS="--cli-rc-file /dev/null"
 # RESOURCE_LIST_DIR
 # RESOURCE_LIST_FILE_NAME
 # TAG_DIRECTORY
+# DEFINED_TAGS_FILE
 
 # make sure params.txt is found if script is called from other directory
 PARAMETER_FILE="$(dirname "$(realpath "$0")")/params.txt"
@@ -18,6 +19,9 @@ if [ ! -f "${PARAMETER_FILE}" ]; then
   exit
 fi
 source "${PARAMETER_FILE}"
+
+# filename of this script
+THIS_SCRIPT="$(basename ${BASH_SOURCE})"
 
 # do not change value if set in environment
 DEBUG_PRINT="${DEBUG_PRINT:=false}"
@@ -28,6 +32,46 @@ debug_print()
     echo -e "$*"
   fi
 }
+
+usage()
+{
+echo -e "\nUsage:"
+echo -e "======"
+echo -e ""
+echo -e "       restore defined tags from backup : ${THIS_SCRIPT} restore"
+echo -e "                    remove defined tags : ${THIS_SCRIPT} clear"
+echo -e "   apply same defined tags to resources : ${THIS_SCRIPT} fromfile"
+echo -e ""
+echo -e "When ${THIS_SCRIPT} is executed with the fromfile option,"
+echo -e "defined tag definitions are read from ${DEFINED_TAGS_FILE}"
+}
+
+if [[ $# -ne 1 ]]; then
+  usage
+  exit
+fi
+ACTION="$1"
+case "${ACTION}" in
+  restore)
+    echo "restoring defined tags from backup directory ${TAG_DIRECTORY}"
+    PRINT_VERB="restored"
+    TAG_ARGUMENT="file://\"\${TAG_DIRECTORY}/\${ocid}\""
+    ;;
+  clear)
+    echo "setting defined tags to \"{}\""
+    PRINT_VERB="cleared"
+    TAG_ARGUMENT="\"{}\""
+    ;;
+  fromfile)
+    echo "setting all defined tags from ${DEFINED_TAGS_FILE}"
+    PRINT_VERB="wrote"
+    TAG_ARGUMENT="file://\"\${DEFINED_TAGS_FILE}\""
+    ;;
+  *)
+    echo -e "\n### unknown parameter \"$ACTION\"."
+    usage
+    exit
+esac
 
 # Begin VENV setup
 # ensure we have a virtual environment
@@ -99,28 +143,6 @@ OCID_LIST=($(echo $TMP_LIST))
 # alternative, but depends on jq
 #OCID_LIST=($(jq --raw-output ".[].id" resource-list.json))
 
-# if ACTION is already set, do not change value
-#ACTION="${ACTION:=SET_TO_EMPTY_VALUE}"
-#ACTION="${ACTION:=SET_ALL_THE_SAME}"
-ACTION="${ACTION:=SET_FROM_BACKUP}"
-case "${ACTION}" in
-  SET_FROM_BACKUP)
-    echo "restoring defined tags from backup directory ${TAG_DIRECTORY}"
-    TAG_ARGUMENT="file://\"\${TAG_DIRECTORY}/\${ocid}\""
-    ;;
-  SET_TO_EMPTY_VALUE)
-    echo "setting defined tags to \"{}\""
-    TAG_ARGUMENT="\"{}\""
-    ;;
-  SET_ALL_THE_SAME)
-    echo "setting all defined tags from ${DEFINED_TAGS_FILE}"
-    TAG_ARGUMENT="file://\"\${DEFINED_TAGS_FILE}\""
-    ;;
-  *)
-    echo -e "\n###\n### unknown action $ACTION.\n### exiting.\n###"
-    exit
-esac
-
 for ocid in "${OCID_LIST[@]}"; do
   case $ocid in
     ocid1.instance.*)
@@ -151,7 +173,7 @@ for ocid in "${OCID_LIST[@]}"; do
   if [ -f "${TAG_DIRECTORY}/${ocid}" ]; then
     OUTPUT=$(eval oci ${OCICLI_PART} ${ocid} --force --defined-tags ${TAG_ARGUMENT} 2>&1)
     if [[ $? -eq 0 ]]; then
-      echo "    restored tags of $ocid"
+      echo "    ${PRINT_VERB} tags of $ocid"
     else
       echo -e ">>>>>>\n--> ERROR processing $ocid\n$OUTPUT\n<<<<<<"
     fi
