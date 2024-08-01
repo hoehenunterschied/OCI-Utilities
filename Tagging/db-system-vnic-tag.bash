@@ -26,32 +26,20 @@ debug_print()
   fi
 }
 
-# Begin VENV setup
-# ensure we have a virtual environment
+# Begin OCI setup
+#
 # OCICLI_DIR is read from params.txt
-if [ -z "${VIRTUAL_ENV}" ]; then
-  debug_print "### virtual environment is unset"
-  if [ -d "${OCICLI_DIR}" ]; then
-    debug_print "### $OCICLI_DIR exists"
-    if [ -f "${OCICLI_DIR}/activate" ]; then
-      debug_print "### sourcing ${OCICLI_DIR}/activate"
-      source "${OCICLI_DIR}/activate"
-    else
-      echo "### No virtual environment and ${OCICLI_DIR}/activate does not exist. Exiting."
-      exit
-    fi
-  else
-    echo "### directory ${OCICLI_DIR} not found. Exiting."
-    exit
-  fi
-else
-  if [ ! -d "${VIRTUAL_ENV}" ]; then
-    echo "### VIRTUAL_ENV ist set, but directory for virtual environment not found. Exiting."
-    exit
-  fi
+# if OCICLI_DIR is set, use oci from there if it exists
+if [ ! -z "${OCICLI_DIR+x}" ] && [ -r "${OCICLI_DIR}/bin/activate" ] && [ -x "${OCICLI_DIR}/bin/oci" ]; then
+  debug_print "### activate VENV from $OCICLI_DIR"
+  source "${OCICLI_DIR}/bin/activate"
 fi
-debug_print "### virtual environment : ${VIRTUAL_ENV}"
-# End VENV setup
+if $(which oci 2>&1 > /dev/null); then
+  debug_print "### using $(which oci)"
+else
+  echo -e "###\n### oci not found.### exiting\n###"
+fi
+# End OCI setup
 
 DB_SYSTEM_ID=$(oci db system list \
                  --compartment-id "${COMPARTMENT_ID}" \
@@ -68,7 +56,8 @@ debug_print "DB_SYSTEM_ID : $DB_SYSTEM_ID"
 debug_print "     VNIC_ID : $VNIC_ID"
 
 echo -e "###\n### Defined Tags of DB System ${DB_SYSTEM_ID}\n###"
-oci db system get --db-system-id "${DB_SYSTEM_ID}" --query "data.\"defined-tags\""
+oci db system update --force --db-system-id "${DB_SYSTEM_ID}" --defined-tags '{"CCA_Basic_Tag": { "email": "oracleidentitycloudservice/ralf.lange@oracle.com" }, "Oracle-Standard": { "CostCenter": "Specialists" }, "Oracle_Tags": { "CreatedBy": "oracleidentitycloudservice/ralf.lange@oracle.com" }}' --query "data.\"defined-tags\""
+#oci db system get --db-system-id "${DB_SYSTEM_ID}" --query "data.\"defined-tags\""
 echo -e "Press RETURN to show Defined Tags of the VNIC\n"
 read
 
@@ -78,10 +67,10 @@ echo -e "Press RETURN to update Defined Tags of the DB System\n"
 read
 
 echo -e "###\n### Defined Tags of DB System after update\n###"
-oci db system update --force --db-system-id "${DB_SYSTEM_ID}" --defined-tags '{}' --query "data.\"defined-tags\""
+oci db system update --force --db-system-id "${DB_SYSTEM_ID}" --defined-tags '{"CCA_Basic_Tag": { "email": "oracleidentitycloudservice/ralf.lange@oracle.com" }, "Oracle-Standard": { "CostCenter": "Specialists" }, "Oracle_Tags": { "CreatedBy": "oracleidentitycloudservice/ralf.lange@oracle.com" }, "ResourceControl": { "ScheduleForStart": "true", "ScheduleForStop": "true", "dns": "true", "keepup": "true", "notification": "true", "schedule": "true" } }' --query "data.\"defined-tags\""
 echo -e "Press RETURN to try to update the VNIC Defined Tags. This will fail.\n"
 read
 
 echo -e "###\n### Trying to update Defined Tags of VNIC\n###"
-oci network vnic update --force --vnic-id "${VNIC_ID}" --defined-tags '{}'
+oci network vnic update --force --vnic-id "${VNIC_ID}" --defined-tags '{"CCA_Basic_Tag": { "email": "oracleidentitycloudservice/ralf.lange@oracle.com" }, "Oracle-Standard": { "CostCenter": "Specialists" }, "Oracle_Tags": { "CreatedBy": "oracleidentitycloudservice/ralf.lange@oracle.com" }, "ResourceControl": { "ScheduleForStart": "true", "ScheduleForStop": "true", "dns": "true", "keepup": "true", "notification": "true", "schedule": "true" } }'
 
