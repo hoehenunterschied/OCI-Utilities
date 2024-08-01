@@ -85,6 +85,7 @@ if $(which oci 2>&1 > /dev/null); then
   debug_print "### using $(which oci)"
 else
   echo -e "###\n### oci not found.### exiting\n###"
+  echo -e "### see https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm\n### to install OCI CLI"
 fi
 # End OCI setup
 
