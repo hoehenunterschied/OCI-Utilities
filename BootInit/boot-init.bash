@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+
+USER_HOME="/home/opc"
+USERANDGROUP="opc:opc"
+TMUX_SCRIPT="tmux-default.bash"
+LESS_SCRIPT="osmh-logs.bash"
+
+sudo dnf -y config-manager --enable ol9_developer_EPEL
+sudo dnf -y install tmux git htop
+
+sed --in-place=.bak -e 's/\$HOME\/bin/$HOME\/.bin/' "${USER_HOME}"/.bashrc
+mkdir "${USER_HOME}/.bin" && chown "${USERANDGROUP}" "${USER_HOME}"/.bin
+
+cat > "${USER_HOME}/.bin/${TMUX_SCRIPT}" << EOF
+#!/usr/bin/env bash
+if [ ! -d "\${HOME}/tmp" ]; then
+  mkdir "\${HOME}/tmp"
+fi
+cd "\${HOME}/tmp"
+tmux has-session -t "\$(hostname)" && tmux attach-session -t "\$(hostname)" || tmux new-session -s "\$(hostname)"\; \\
+     split-window -h \; \\
+     send-keys 'htop' C-m\; \\
+     split-window -v\; \\
+     select-pane -t 1\;
+EOF
+chmod ug+x "${USER_HOME}"/.bin/"${TMUX_SCRIPT}"
+chown "${USERANDGROUP}" "${USER_HOME}"/.bin/"${TMUX_SCRIPT}"
+
+cat >> "${USER_HOME}"/.bash_profile << EOF
+if [[ -z \$TMUX ]] && [[ -n \$SSH_TTY ]]; then
+	  "\${HOME}"/.bin/"${TMUX_SCRIPT}"
+fi
+EOF
+
+cat > "${USER_HOME}/.bin/${LESS_SCRIPT}" << EOF
+#!/usr/bin/env bash
+sudo less \\
+  /var/lib/oracle-cloud-agent/plugins/oci-osmh/osmh-agent/stateDir/log/osmh-agent.log \\
+  /var/log/oracle-cloud-agent/plugins/oci-osmh/oci-osmh.log \\
+  /var/log/oracle-cloud-agent/agent.log
+EOF
+chmod ug+x "${USER_HOME}"/.bin/"${LESS_SCRIPT}"
+chown "${USERANDGROUP}" "${USER_HOME}"/.bin/"${LESS_SCRIPT}"
+
+cd "${USER_HOME}"
+git clone --single-branch https://github.com/gpakosz/.tmux.git
+ln -s -f .tmux/.tmux.conf
+cp .tmux/.tmux.conf.local .
+sed --in-place=.bak -e 's/^#set -g mouse on/set -g mouse on/' "${USER_HOME}"/.tmux.conf.local
+chown -R "${USERANDGROUP}" "${USER_HOME}"/.tmux
+chown "${USERANDGROUP}" "${USER_HOME}"/.tmux.conf
+chown "${USERANDGROUP}" "${USER_HOME}"/.tmux.conf.local
+chown "${USERANDGROUP}" "${USER_HOME}"/.tmux.conf.local.bak
