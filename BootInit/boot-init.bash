@@ -4,6 +4,7 @@ USER_HOME="/home/opc"
 USERANDGROUP="opc:opc"
 TMUX_SCRIPT="tmux-default.bash"
 LESS_SCRIPT="osmh-logs.bash"
+OCI_CONNECTIVITY_SCRIPT="oci-connectivity.bash"
 
 sudo dnf -y config-manager --enable ol9_developer_EPEL
 sudo dnf -y install tmux git htop
@@ -41,6 +42,21 @@ sudo less \\
 EOF
 chmod ug+x "${USER_HOME}"/.bin/"${LESS_SCRIPT}"
 chown "${USERANDGROUP}" "${USER_HOME}"/.bin/"${LESS_SCRIPT}"
+
+cat > "${USER_HOME}/.bin/${OCI_CONNECTIVITY_SCRIPT}" << EOF
+#!/usr/bin/env bash
+
+tempfile=\$(mktemp)
+echo "Temporary file created: \$tempfile"
+
+curl -s -H "Authorization: Bearer Oracle" http://169.254.169.254/opc/v2/instance/regionInfo > "\${tempfile}"
+export REGION=\$(cat "\${tempfile}" | jq -r ".regionIdentifier")
+export DOMAIN=\$(cat "\${tempfile}" | jq -r ".realmDomainComponent")
+curl -s https://osmh."\${REGION}".oci."\${DOMAIN}" &>/dev/null ; [ \$? == 0 ] && echo "Success" || echo "Failure"
+rm "\${tempfile}"
+EOF
+chmod ug+x "${USER_HOME}"/.bin/"${OCI_CONNECTIVITY_SCRIPT}"
+chown "${USERANDGROUP}" "${USER_HOME}"/.bin/"${OCI_CONNECTIVITY_SCRIPT}"
 
 cd "${USER_HOME}"
 git clone --single-branch https://github.com/gpakosz/.tmux.git
