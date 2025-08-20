@@ -16,6 +16,7 @@ else
 fi
 
 if [[ "$release_info" == *"7."* || "$release_info" == "7" ]]; then
+    FIXPATHIN=".bash_profile"
     cat > /etc/yum.repos.d/epel-yum-ol7.repo << EOF
 [ol7_epel]
 name=Oracle Linux \$releasever EPEL (\$basearch)
@@ -24,12 +25,18 @@ gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-oracle
 gpgcheck=1
 enabled=1
 EOF
-    yum install -y tmux git htop
+    yum install -y git htop bison automake gcc kernel-devel make ncurses-devel libevent-devel
+    pushd /tmp && git clone https://github.com/tmux/tmux.git \
+      && cd tmux \
+      && sh autogen.sh \
+      && ./configure && make && make install
+    popd
 elif [[ "$release_info" == *"8."* || "$release_info" == "8" ]]; then
-    echo "Oracle Linux 8 detected"
+    FIXPATHIN=".bashrc"
     dnf -y config-manager --enable ol8_developer_EPEL
     dnf -y install tmux git htop
 elif [[ "$release_info" == *"9."* || "$release_info" == "9" ]]; then
+    FIXPATHIN=".bashrc"
     dnf -y config-manager --enable ol9_developer_EPEL
     dnf -y install tmux git htop
 else
@@ -37,7 +44,7 @@ else
 fi
 
 
-sed --in-place=.bak -e 's/\$HOME\/bin/$HOME\/.bin/' "${USER_HOME}"/.bashrc
+sed --in-place=.bak -e 's/\$HOME\/bin/$HOME\/.bin/' "${USER_HOME}"/"${FIXPATHIN}"
 mkdir "${USER_HOME}/.bin" && chown "${USERANDGROUP}" "${USER_HOME}"/.bin
 
 cat > "${USER_HOME}/.bin/${TMUX_SCRIPT}" << EOF
