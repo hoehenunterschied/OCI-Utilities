@@ -6,8 +6,36 @@ TMUX_SCRIPT="tmux-default.bash"
 LESS_SCRIPT="osmh-logs.bash"
 OCI_CONNECTIVITY_SCRIPT="oci-connectivity.bash"
 
-sudo dnf -y config-manager --enable ol9_developer_EPEL
-sudo dnf -y install tmux git htop
+# determine operating system version
+if [ -f /etc/oracle-release ]; then
+    release_info=$(cat /etc/oracle-release)
+elif [ -f /etc/os-release ]; then
+    release_info=$(grep '^VERSION_ID=' /etc/os-release | cut -d= -f2 | tr -d '"')
+else
+    echo "Cannot determine Oracle Linux version"
+fi
+
+if [[ "$release_info" == *"7."* || "$release_info" == "7" ]]; then
+    cat > /etc/yum.repos.d/epel-yum-ol7.repo << EOF
+[ol7_epel]
+name=Oracle Linux \$releasever EPEL (\$basearch)
+baseurl=http://yum.oracle.com/repo/OracleLinux/OL7/developer_EPEL/\$basearch/
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-oracle
+gpgcheck=1
+enabled=1
+EOF
+    yum install -y tmux git htop
+elif [[ "$release_info" == *"8."* || "$release_info" == "8" ]]; then
+    echo "Oracle Linux 8 detected"
+    dnf -y config-manager --enable ol8_developer_EPEL
+    dnf -y install tmux git htop
+elif [[ "$release_info" == *"9."* || "$release_info" == "9" ]]; then
+    dnf -y config-manager --enable ol9_developer_EPEL
+    dnf -y install tmux git htop
+else
+    echo "Unknown or unsupported Oracle Linux version: $release_info"
+fi
+
 
 sed --in-place=.bak -e 's/\$HOME\/bin/$HOME\/.bin/' "${USER_HOME}"/.bashrc
 mkdir "${USER_HOME}/.bin" && chown "${USERANDGROUP}" "${USER_HOME}"/.bin
