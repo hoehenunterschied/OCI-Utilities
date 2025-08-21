@@ -1,15 +1,25 @@
 #!/usr/bin/env bash
 
 NAME=();                 OS=();                       CPU=();
-NAME+=('newol7arm');        OS+=('Oracle Linux 7');      CPU+=('Ampere');
-NAME+=('newol8arm');        OS+=('Oracle Linux 8');      CPU+=('Ampere');
-NAME+=('newol9arm');        OS+=('Oracle Linux 9');      CPU+=('Ampere');
-NAME+=('newol7x86');        OS+=('Oracle Linux 7');      CPU+=('Intel');
-NAME+=('newol8x86');        OS+=('Oracle Linux 8');      CPU+=('Intel');
-NAME+=('newol9x86');        OS+=('Oracle Linux 9');      CPU+=('Intel');
-NAME+=('newol7amd');        OS+=('Oracle Linux 7');      CPU+=('AMD');
-NAME+=('newol8amd');        OS+=('Oracle Linux 8');      CPU+=('AMD');
-NAME+=('newol9amd');        OS+=('Oracle Linux 9');      CPU+=('AMD');
+NAME+=('ol9arm1');        OS+=('Oracle Linux 9');      CPU+=('Ampere');
+NAME+=('ol9arm2');        OS+=('Oracle Linux 9');      CPU+=('Ampere');
+NAME+=('ol9arm3');        OS+=('Oracle Linux 9');      CPU+=('Ampere');
+NAME+=('ol9arm4');        OS+=('Oracle Linux 9');      CPU+=('Ampere');
+NAME+=('ol9arm5');        OS+=('Oracle Linux 9');      CPU+=('Ampere');
+NAME+=('ol8arm1');        OS+=('Oracle Linux 8');      CPU+=('Ampere');
+NAME+=('ol8arm2');        OS+=('Oracle Linux 8');      CPU+=('Ampere');
+NAME+=('ol8arm3');        OS+=('Oracle Linux 8');      CPU+=('Ampere');
+NAME+=('ol8arm4');        OS+=('Oracle Linux 8');      CPU+=('Ampere');
+NAME+=('ol8arm5');        OS+=('Oracle Linux 8');      CPU+=('Ampere');
+#NAME+=('newol7arm');        OS+=('Oracle Linux 7');      CPU+=('Ampere');
+#NAME+=('newol8arm');        OS+=('Oracle Linux 8');      CPU+=('Ampere');
+#NAME+=('newol9arm');        OS+=('Oracle Linux 9');      CPU+=('Ampere');
+#NAME+=('newol7x86');        OS+=('Oracle Linux 7');      CPU+=('Intel');
+#NAME+=('newol8x86');        OS+=('Oracle Linux 8');      CPU+=('Intel');
+#NAME+=('newol9x86');        OS+=('Oracle Linux 9');      CPU+=('Intel');
+#NAME+=('newol7amd');        OS+=('Oracle Linux 7');      CPU+=('AMD');
+#NAME+=('newol8amd');        OS+=('Oracle Linux 8');      CPU+=('AMD');
+#NAME+=('newol9amd');        OS+=('Oracle Linux 9');      CPU+=('AMD');
 # Windows not yet implemented
 #NAME+=('win2016x86');    OS+=('Windows Server 2016'); CPU+=('Intel');
 #NAME+=('win2019x86');    OS+=('Windows Server 2019'); CPU+=('Intel');

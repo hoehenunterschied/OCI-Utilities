@@ -1,0 +1,672 @@
+{
+  "dashboards": [
+    {
+      "dashboardId": "ocid1.managementdashboard.oc1..aaaaaaaaa42slo45pwyuqkkttnvxdyczl7jf23zmjavamzf4ao4prlb6pnqa",
+      "providerId": "management-dashboard",
+      "providerName": "Management Dashboard",
+      "providerVersion": "3.0.0",
+      "tiles": [
+        {
+          "displayName": "__INHERIT__",
+          "savedSearchId": "ocid1.managementsavedsearch.oc1..aaaaaaaa76qoya3lp2r7djgijobonmiezavjzyihlwzbmsk2gixzd2irp5wa",
+          "row": 0,
+          "column": 0,
+          "height": 3,
+          "width": 8,
+          "nls": {},
+          "uiConfig": {},
+          "dataConfig": [],
+          "state": "DEFAULT",
+          "drilldownConfig": [],
+          "parametersMap": {
+            "compartmentId": "$(dashboard.params.compartmentId)",
+            "time": "$(dashboard.params.time)"
+          },
+          "description": null
+        },
+        {
+          "displayName": "Cost",
+          "savedSearchId": "OOBSS-management-dashboard-123",
+          "row": 0,
+          "column": 8,
+          "height": 3,
+          "width": 4,
+          "nls": {},
+          "uiConfig": {
+            "internalKey": "OOBSS-management-dashboard-123",
+            "defaultDataSource": "oci_computeagent/LoadAverage",
+            "chartInfo": {
+              "colorBy": "name",
+              "series": "name",
+              "value": "aggregatedDatapoints.value",
+              "group": "aggregatedDatapoints.timestamp",
+              "jetConfig": {
+                "type": "bar",
+                "timeAxisType": "enabled",
+                "xAxis": {
+                  "viewportStartGroup": "$(params.time.start)",
+                  "viewportEndGroup": "$(params.time.end)"
+                }
+              }
+            }
+          },
+          "dataConfig": [
+            {
+              "name": "oci_computeagent/LoadAverage",
+              "type": "monitoringDataSource",
+              "parameters": {
+                "namespace": "oci_computeagent",
+                "mql": "LoadAverage[auto].grouping().mean()",
+                "compartmentId": "$(params.compartmentId)",
+                "startTime": "$(params.time.start)",
+                "endTime": "$(params.time.end)",
+                "regionName": "$(params.regionName)"
+              }
+            }
+          ],
+          "state": "DEFAULT",
+          "drilldownConfig": [],
+          "parametersMap": {
+            "time": "$(dashboard.params.time)",
+            "regionName": "$(context.regionName)",
+            "compartmentId": "$(dashboard.params.compartmentId)"
+          },
+          "description": null
+        },
+        {
+          "displayName": "Boot Volume Backups",
+          "savedSearchId": "ocid1.managementsavedsearch.oc1..aaaaaaaabykxqf36kj6gb44xywqzdl7am252vubej3plbrqnbacei3m6auaa",
+          "row": 3,
+          "column": 0,
+          "height": 3,
+          "width": 8,
+          "nls": {},
+          "uiConfig": {},
+          "dataConfig": [],
+          "state": "DEFAULT",
+          "drilldownConfig": [],
+          "parametersMap": {
+            "compartmentId": "$(dashboard.params.compartmentId)",
+            "time": "$(dashboard.params.time)",
+            "regionName": "$(context.regionName)"
+          },
+          "description": "Boot Volume Backups in Compartment"
+        },
+        {
+          "displayName": "__INHERIT__",
+          "savedSearchId": "ocid1.managementsavedsearch.oc1..aaaaaaaanvgozla2gcgalbc745jiqdkboam75owfunggtdndzmpf5ewhr45a",
+          "row": 3,
+          "column": 8,
+          "height": 3,
+          "width": 4,
+          "nls": {},
+          "uiConfig": {},
+          "dataConfig": [],
+          "state": "DEFAULT",
+          "drilldownConfig": [],
+          "parametersMap": {
+            "compartmentId": "$(dashboard.params.compartmentId)",
+            "time": "$(dashboard.params.time)"
+          },
+          "description": null
+        }
+      ],
+      "displayName": "JSON edited Widgets",
+      "description": "",
+      "compartmentId": "ocid1.compartment.oc1..aaaaaaaaqfdeufdafms6trnedq6wnpwhwxnvynas6mqydvz7dsxciffyiana",
+      "isOobDashboard": false,
+      "isShowInHome": false,
+      "metadataVersion": "2.0",
+      "isShowDescription": true,
+      "screenImage": "todo: provide value[mandatory]",
+      "nls": {},
+      "uiConfig": {
+        "isFilteringEnabled": false,
+        "isTimeRangeEnabled": true,
+        "isRefreshEnabled": true
+      },
+      "dataConfig": [],
+      "type": "normal",
+      "isFavorite": false,
+      "savedSearches": [
+        {
+          "id": "ocid1.managementsavedsearch.oc1..aaaaaaaanvgozla2gcgalbc745jiqdkboam75owfunggtdndzmpf5ewhr45a",
+          "displayName": "Load and Utilization",
+          "providerId": "management-dashboard",
+          "providerVersion": "3.0.0",
+          "providerName": "Management Dashboard",
+          "compartmentId": "ocid1.compartment.oc1..aaaaaaaaqfdeufdafms6trnedq6wnpwhwxnvynas6mqydvz7dsxciffyiana",
+          "isOobSavedSearch": false,
+          "description": "CPUUtilization and AverageLoad",
+          "nls": {},
+          "type": "WIDGET_SHOW_IN_DASHBOARD",
+          "uiConfig": {
+            "vizType": "chart",
+            "chartInfo": {
+              "jetConfig": {
+                "type": "line",
+                "timeAxisType": "enabled",
+                "xAxis": {
+                  "viewportMin": "$(params.time.start)",
+                  "viewportMax": "$(params.time.end)"
+                },
+                "yAxis": {
+                  "title": "%"
+                },
+                "y2Axis": {
+                  "title": "Load"
+                },
+                "legend": {
+                  "rendered": true,
+                  "position": "top"
+                }
+              },
+              "value": "aggregatedDatapoints.value",
+              "group": "aggregatedDatapoints.timestamp",
+              "colorBy": "name",
+              "series": "name",
+              "y2SeriesValue": "LoadAverage"
+            },
+            "defaultDataSource": "union"
+          },
+          "dataConfig": [
+            {
+              "name": "oci_computeagent/CpuUtilization",
+              "type": "monitoringDataSource",
+              "parameters": {
+                "compartmentId": "$(params.compartmentId)",
+                "startTime": "$(params.time.start)",
+                "endTime": "$(params.time.end)",
+                "regionName": "$(params.regionName)",
+                "namespace": "oci_computeagent",
+                "mql": "CpuUtilization[auto].grouping().mean()"
+              }
+            },
+            {
+              "name": "oci_computeagent/LoadAverage",
+              "type": "monitoringDataSource",
+              "parameters": {
+                "compartmentId": "$(params.compartmentId)",
+                "startTime": "$(params.time.start)",
+                "endTime": "$(params.time.end)",
+                "regionName": "$(params.regionName)",
+                "namespace": "oci_computeagent",
+                "mql": "LoadAverage[auto].grouping().mean()"
+              }
+            },
+            {
+              "name": "union",
+              "type": "transformUnion",
+              "parameters": {
+                "dependents": [
+                  "oci_computeagent/CpuUtilization",
+                  "oci_computeagent/LoadAverage"
+                ]
+              }
+            }
+          ],
+          "screenImage": "...",
+          "metadataVersion": "2.0",
+          "widgetTemplate": "visualizations/chartWidgetTemplate.html",
+          "widgetVM": "visualizations/chartWidget",
+          "freeformTags": {},
+          "definedTags": {},
+          "parametersConfig": [
+            {
+              "name": "time",
+              "displayName": "$(bundle.globalSavedSearch.TIME_PARAMETER_NAME)",
+              "required": true,
+              "editUi": {
+                "inputType": "savedSearch",
+                "filterTile": {
+                  "filterId": "OOBSS-management-dashboard-time-selector-filter",
+                  "parametersMap": {
+                    "maxDurationDays": 89
+                  }
+                }
+              }
+            },
+            {
+              "name": "compartmentId",
+              "displayName": "$(bundle.globalSavedSearch.COMPARTMENT)",
+              "required": true,
+              "defaultFilterIds": [
+                "OOBSS-management-dashboard-compartment-filter"
+              ],
+              "valueFormat": {
+                "type": "object"
+              },
+              "editUi": {
+                "inputType": "compartmentSelect"
+              }
+            },
+            {
+              "name": "regionName",
+              "displayName": "$(bundle.globalSavedSearch.REGION)",
+              "required": false,
+              "defaultFilterIds": [
+                "OOBSS-management-dashboard-region-filter"
+              ],
+              "valueFormat": {
+                "type": "string"
+              },
+              "editUi": {
+                "inputType": "savedSearch",
+                "filterTile": {
+                  "filterId": "OOBSS-management-dashboard-region-filter",
+                  "parametersMap": {
+                    "selectionMode": "single"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Entity",
+              "displayName": "Entity"
+            }
+          ],
+          "featuresConfig": {
+            "crossService": {
+              "shared": true
+            },
+            "dependencies": [
+              {
+                "libProviderId": "management-dashboard",
+                "version": "1.119.0"
+              }
+            ],
+            "serviceTypes": [
+              "management-dashboard"
+            ]
+          },
+          "drilldownConfig": []
+        },
+        {
+          "id": "ocid1.managementsavedsearch.oc1..aaaaaaaa76qoya3lp2r7djgijobonmiezavjzyihlwzbmsk2gixzd2irp5wa",
+          "displayName": "Instances",
+          "providerId": "log-analytics",
+          "providerVersion": "3.0.0",
+          "providerName": "Logging Analytics",
+          "compartmentId": "ocid1.compartment.oc1..aaaaaaaaqfdeufdafms6trnedq6wnpwhwxnvynas6mqydvz7dsxciffyiana",
+          "isOobSavedSearch": false,
+          "description": "Instances in Compartment",
+          "nls": {},
+          "type": "WIDGET_SHOW_IN_DASHBOARD",
+          "uiConfig": {
+            "vizType": "table",
+            "color": {
+              "paletteName": "standard"
+            },
+            "tableInfo": {
+              "allColumns": false,
+              "cols": [
+                {
+                  "val": "displayName",
+                  "header": {
+                    "name": "name"
+                  },
+                  "sortable": "enable"
+                },
+                {
+                  "val": "lifecycleState",
+                  "header": {
+                    "name": "lifecycleState"
+                  },
+                  "sortable": "enable"
+                },
+                {
+                  "val": "shape",
+                  "header": {
+                    "name": "Shape"
+                  },
+                  "sortable": "enable"
+                },
+                {
+                  "val": "timeCreated",
+                  "header": {
+                    "name": "time created"
+                  },
+                  "sortable": "enable"
+                }
+              ]
+            },
+            "defaultDataSource": "items"
+          },
+          "dataConfig": [
+            {
+              "name": "items",
+              "type": "transform",
+              "parameters": {
+                "dependents": [
+                  "instanceQuery"
+                ],
+                "selectedFields": [
+                  {
+                    "field": "displayName"
+                  },
+                  {
+                    "field": "lifecycleState"
+                  },
+                  {
+                    "field": "shape"
+                  },
+                  {
+                    "field": "timeCreated"
+                  }
+                ],
+                "whereClause": [
+                  {
+                    "field": "lifecycleState",
+                    "op": "!=",
+                    "val": "TERMINATED"
+                  }
+                ]
+              }
+            },
+            {
+              "name": "instanceQuery",
+              "type": "genericDataSource",
+              "parameters": {
+                "webServiceUrl": {
+                  "default": "https://iaas.$(params.regionName).oraclecloud.com/20160918/instances?compartmentId=$(params.compartmentId)"
+                },
+                "httpMethod": "GET"
+              }
+            }
+          ],
+          "screenImage": "...",
+          "metadataVersion": "2.0",
+          "widgetTemplate": "visualizations/chartWidgetTemplate.html",
+          "widgetVM": "visualizations/chartWidget",
+          "freeformTags": {},
+          "definedTags": {},
+          "parametersConfig": [
+            {
+              "name": "time",
+              "displayName": "$(bundle.globalSavedSearch.TIME_PARAMETER_NAME)",
+              "required": true,
+              "editUi": {
+                "inputType": "savedSearch",
+                "filterTile": {
+                  "filterId": "OOBSS-management-dashboard-time-selector-filter",
+                  "parametersMap": {
+                    "maxDurationDays": 89
+                  }
+                }
+              }
+            },
+            {
+              "name": "compartmentId",
+              "displayName": "$(bundle.globalSavedSearch.COMPARTMENT)",
+              "required": true,
+              "defaultFilterIds": [
+                "OOBSS-management-dashboard-compartment-filter"
+              ],
+              "editUi": {
+                "inputType": "compartmentSelect"
+              }
+            },
+            {
+              "name": "regionName",
+              "displayName": "$(bundle.globalSavedSearch.REGION)",
+              "required": false,
+              "defaultFilterIds": [
+                "OOBSS-management-dashboard-region-filter"
+              ],
+              "valueFormat": {
+                "type": "string"
+              },
+              "editUi": {
+                "inputType": "savedSearch",
+                "filterTile": {
+                  "filterId": "OOBSS-management-dashboard-region-filter",
+                  "parametersMap": {
+                    "selectionMode": "single"
+                  }
+                }
+              }
+            }
+          ],
+          "featuresConfig": {
+            "crossService": {
+              "shared": true
+            },
+            "dependencies": [],
+            "serviceTypes": [
+              "management-dashboard"
+            ]
+          },
+          "drilldownConfig": []
+        },
+        {
+          "id": "ocid1.managementsavedsearch.oc1..aaaaaaaabykxqf36kj6gb44xywqzdl7am252vubej3plbrqnbacei3m6auaa",
+          "displayName": "Volume Backups",
+          "providerId": "management-dashboard",
+          "providerVersion": "3.0.0",
+          "providerName": "Management Dashboards",
+          "compartmentId": "ocid1.compartment.oc1..aaaaaaaaqfdeufdafms6trnedq6wnpwhwxnvynas6mqydvz7dsxciffyiana",
+          "isOobSavedSearch": false,
+          "description": "Volume Backups in Compartment",
+          "nls": {},
+          "type": "WIDGET_SHOW_IN_DASHBOARD",
+          "uiConfig": {
+            "vizType": "table",
+            "color": {
+              "paletteName": "standard"
+            },
+            "tableInfo": {
+              "allColumns": false,
+              "cols": [
+                {
+                  "val": "displayName",
+                  "header": {
+                    "name": "name"
+                  },
+                  "sortable": "disable"
+                },
+                {
+                  "val": "lifecycleState",
+                  "header": {
+                    "name": "lifecycleState"
+                  },
+                  "sortable": "disable"
+                },
+                {
+                  "val": "sourceType",
+                  "header": {
+                    "name": "SourceType"
+                  },
+                  "sortable": "disable"
+                },
+                {
+                  "val": "type",
+                  "header": {
+                    "name": "Type"
+                  },
+                  "sortable": "disable"
+                },
+                {
+                  "val": "uniqueSizeInGBs",
+                  "header": {
+                    "name": "UniqueSize(GB)"
+                  },
+                  "sortable": "disable"
+                },
+                {
+                  "val": "sizeInGBs",
+                  "header": {
+                    "name": "Size(GB)"
+                  },
+                  "sortable": "disable"
+                },
+                {
+                  "val": "timeCreated",
+                  "header": {
+                    "name": "time created"
+                  },
+                  "sortable": "enable"
+                }
+              ]
+            },
+            "defaultDataSource": "items"
+          },
+          "dataConfig": [
+            {
+              "name": "items",
+              "type": "transform",
+              "parameters": {
+                "dependents": [
+                  "volumeBackupQuery"
+                ],
+                "selectedFields": [
+                  {
+                    "field": "displayName"
+                  },
+                  {
+                    "field": "lifecycleState"
+                  },
+                  {
+                    "field": "sizeInGBs"
+                  },
+                  {
+                    "field": "sourceType"
+                  },
+                  {
+                    "field": "uniqueSizeInGBs"
+                  },
+                  {
+                    "field": "type"
+                  },
+                  {
+                    "field": "timeCreated"
+                  }
+                ],
+                "whereClause": [
+                  {
+                    "field": "lifecycleState",
+                    "op": "!=",
+                    "val": "TERMINATED"
+                  }
+                ]
+              }
+            },
+            {
+              "name": "volumeBackupQuery",
+              "type": "genericDataSource",
+              "parameters": {
+                "webServiceUrl": {
+                  "default": "https://iaas.$(params.regionName).oraclecloud.com/20160918/bootVolumeBackups?compartmentId=$(params.compartmentId)"
+                },
+                "httpMethod": "GET"
+              }
+            }
+          ],
+          "screenImage": "...",
+          "metadataVersion": "2.0",
+          "widgetTemplate": "visualizations/chartWidgetTemplate.html",
+          "widgetVM": "visualizations/chartWidget",
+          "freeformTags": {},
+          "definedTags": {},
+          "parametersConfig": [
+            {
+              "name": "time",
+              "displayName": "$(bundle.globalSavedSearch.TIME_PARAMETER_NAME)",
+              "required": true,
+              "editUi": {
+                "inputType": "savedSearch",
+                "filterTile": {
+                  "filterId": "OOBSS-management-dashboard-time-selector-filter",
+                  "parametersMap": {
+                    "maxDurationDays": 89
+                  }
+                }
+              }
+            },
+            {
+              "name": "compartmentId",
+              "displayName": "$(bundle.globalSavedSearch.COMPARTMENT)",
+              "required": true,
+              "defaultFilterIds": [
+                "OOBSS-management-dashboard-compartment-filter"
+              ],
+              "editUi": {
+                "inputType": "compartmentSelect"
+              }
+            },
+            {
+              "name": "regionName",
+              "displayName": "$(bundle.globalSavedSearch.REGION)",
+              "required": false,
+              "defaultFilterIds": [
+                "OOBSS-management-dashboard-region-filter"
+              ],
+              "valueFormat": {
+                "type": "string"
+              },
+              "editUi": {
+                "inputType": "savedSearch",
+                "filterTile": {
+                  "filterId": "OOBSS-management-dashboard-region-filter",
+                  "parametersMap": {
+                    "selectionMode": "single"
+                  }
+                }
+              }
+            }
+          ],
+          "featuresConfig": {
+            "crossService": {
+              "shared": true
+            },
+            "dependencies": [],
+            "serviceTypes": [
+              "management-dashboard"
+            ]
+          },
+          "drilldownConfig": []
+        }
+      ],
+      "parametersConfig": [
+        {
+          "savedSearchId": "OOBSS-management-dashboard-compartment-filter",
+          "width": 4,
+          "state": "DEFAULT",
+          "parametersMap": {
+            "showIncludeSubcompartments": true,
+            "isStoreInLocalStorage": false,
+            "isActiveCompartment": "true"
+          },
+          "name": "compartmentId",
+          "localStorageKey": "compartmentId"
+        },
+        {
+          "savedSearchId": "OOBSS-management-dashboard-filter-4a",
+          "width": 4,
+          "state": "DEFAULT",
+          "parametersMap": {
+            "isStoreInLocalStorage": true
+          },
+          "name": "log-analytics-loggroup-filter",
+          "localStorageKey": "log-analytics-loggroup-filter"
+        },
+        {
+          "name": "time",
+          "displayName": "$(bundle.globalSavedSearch.TIME)",
+          "src": "$(context.time)"
+        }
+      ],
+      "featuresConfig": {
+        "crossService": {
+          "shared": true
+        },
+        "serviceTypes": [
+          "log-analytics",
+          "management-dashboard"
+        ]
+      },
+      "drilldownConfig": [],
+      "freeformTags": {},
+      "definedTags": {}
+    }
+  ]
+}
