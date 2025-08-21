@@ -71,6 +71,13 @@ EOF
 cat > "${USER_HOME}/.bin/${LESS_SCRIPT}" << EOF
 #!/usr/bin/env bash
 
+# filename of this script
+THIS_SCRIPT="\$(basename \${BASH_SOURCE})"
+# restart script as sudo if effective user id is not root
+if [[ "\$EUID" -ne 0 ]]; then
+    exec sudo "\${BASH_SOURCE}" "\$@"
+fi
+
 LOG=()
 LOG+=('/var/lib/oracle-cloud-agent/plugins/oci-osmh/osmh-agent/stateDir/log/osmh-agent.log')
 LOG+=('/var/log/oracle-cloud-agent/plugins/oci-osmh/oci-osmh.log')
