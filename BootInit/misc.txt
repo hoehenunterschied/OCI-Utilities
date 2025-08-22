@@ -1,0 +1,64 @@
+# get agent config on instance
+curl -H "Authorization: Bearer Oracle" -L http://169.254.169.254/opc/v2/instance/agentConfig; echo ""
+
+# other files on instance
+/etc/osmh-profile
+/var/lib/oracle-cloud-agent/plugins/oci-osmh/osmh-agent-unregister
+
+## get OS Management Hub plugin version
+# OCI Oracle Linux
+sudo cat $(ps -ef | awk '{print $8}' | grep osmh-agent | sed 's:/[^/]*$::')/version
+# on-premises Oracle Linux
+sudo cat $(ps -ef | awk '{print $8}' | grep osmh | sed 's:/[^/]*$::')/version
+# Windows
+Get-Process osmh | Select-Object Path
+returns similar to:
+Path
+----
+C:\Windows\ServiceProfiles\OCAOSMH\AppData\Local\OracleCloudAgent\plugins\oci-osmh\osmh-agent\<YYMMDD.HHMM>\osmh
+then do
+cat C:\Windows\ServiceProfiles\OCAOSMH\AppData\Local\OracleCloudAgent\plugins\oci-osmh\osmh-agent\<YYMMDD.HHMM>\version
+
+## check for osmh-agent.log Error Messages
+# OCI Instance:
+sudo grep -i "error code" /var/lib/oracle-cloud-agent/plugins/oci-osmh/osmh-agent/stateDir/log/osmh-agent.log
+# on-premises instance
+sudo grep  -i "error code" /opt/oracle/mgmt_agent/plugins/osmh/stateDir/log/osmh-agent.log
+# Windows instance
+Get-Content C:\Windows\ServiceProfiles\OCAOSMH\AppData\Local\OracleCloudAgent\plugins\oci-osmh\osmh-agent\stateDir\log\osmh-agent.log | Select-String -Pattern "Error Code"
+
+## Agent status
+# OCI instance
+sudo systemctl status oracle-cloud-agent.service
+# on premises or 3rd-party cloud:
+sudo systemctl status mgmt_agent
+
+# check if time differs between instance and OSMH service
+curl -s --head https://managementagent.eu-frankfurt-1.oci.oraclecloud.com | grep Date
+echo "Date: $(date -u)"
+
+## verify instance can connect to OS Management Hub
+# Oracle Linux
+curl -s -H "Authorization: Bearer Oracle" http://169.254.169.254/opc/v2/instance/regionInfo > /tmp/curl.out
+REGION=`cat /tmp/curl.out | jq -r ".regionIdentifier"` ; export REGION
+DOMAIN=`cat /tmp/curl.out | jq -r ".realmDomainComponent"` ; export DOMAIN
+curl -s https://osmh.$REGION.oci.$DOMAIN &>/dev/null ; [ $? == 0 ] && echo "Success" || echo "Failure"
+# Windows
+Invoke-WebRequest -Headers @{'Authorization'='Bearer Oracle'} http://169.254.169.254/opc/v2/instance/regionInfo
+then read the values for realmDomainComponent and regionIdentifier,
+construct URL like https://osmh.<region>.oci.<domain>/
+http://osmh.eu-frankfurt-1.oci.oraclecloud.com/
+Invoke-WebRequest -TimeoutSec 3 http://osmh.eu-frankfurt-1.oci.oraclecloud.com/
+
+# on-premises and 3rd party cloud: check mirror and proxy ports
+STATION=`sudo grep GatewayServerHost /opt/oracle/mgmt_agent/agent_inst/config/emd.properties | awk -F"=" '{print $2}'` ; export STATION
+STATION_PROXY_PORT=`sudo grep GatewayServerPort /opt/oracle/mgmt_agent/agent_inst/config/emd.properties | awk -F"=" '{print $2}'` ; export STATION_PROXY_PORT
+STATION_MIRROR_PORT=`sudo grep baseurl /etc/yum.repos.d/osmh.repo | awk -F"/" '{print $3}' | awk -F":" '{print $2}' | uniq` ; export STATION_MIRROR_PORT
+echo -n "Probing $STATION proxy port $STATION_PROXY_PORT :  "
+nc -zv $STATION $STATION_PROXY_PORT &>/dev/null ; [ $? == 0 ] && echo "Success" || echo "Failure"
+echo -n "Probing $STATION mirror port $STATION_MIRROR_PORT : "
+nc -zv $STATION $STATION_MIRROR_PORT &>/dev/null ; [ $? == 0 ] && echo "Success" || echo "Failure"
+
+Known Issues
+============
+https://docs.oracle.com/en-us/iaas/osmh/doc/known-issues.htm

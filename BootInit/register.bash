@@ -21,6 +21,5 @@ while true; do
 done
 ssh "${INSTANCE_NAME}" curl -H \"Authorization: Bearer Oracle\" -L http://169.254.169.254/opc/v2/instance/agentConfig\; echo \"\"
 echo ""
-exit
 oci os-management-hub managed-instance attach-profile --managed-instance-id "${INSTANCE_ID}" --profile-id "${PROFILE_ID}"
 ssh "${INSTANCE_NAME}" sudo systemctl restart oracle-cloud-agent.service
