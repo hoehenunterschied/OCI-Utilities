@@ -132,7 +132,7 @@ for i in "${!NAME[@]}"; do
       SHAPE="VM.Optimized3.Flex"
       ;;
   esac 
-  IMAGE_ID=$(oci compute image list --all --query "data[?starts_with(\"display-name\", '$OS') && $NOT contains(\"display-name\", 'aarch64') && ! contains(\"display-name\", 'GPU') && ! contains(\"display-name\", 'Minimal')]|sort_by(@, &\"time-created\")[-1].\"id\"" --all | tr -d '"')
+  IMAGE_ID=$(oci --cli-rc-file /dev/null compute image list --compartment-id "${COMPARTMENT_ID}" --all --query "data[?starts_with(\"display-name\", '$OS') && $NOT contains(\"display-name\", 'aarch64') && ! contains(\"display-name\", 'GPU') && ! contains(\"display-name\", 'Minimal')]|sort_by(@, &\"time-created\")[-1].\"id\"" --all | tr -d '"')
   #echo "     NOT: $NOT"
   #echo "      OS: $OS"
   #echo "   SHAPE: $SHAPE"
