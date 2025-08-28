@@ -1,60 +1,48 @@
 #!/usr/bin/env bash
+id > /tmp/from_user-stage_script.txt
 
 DNSHOSTNAME="rpiconnect"
 DNSDOMAIN="katogana.de"
 NSGS=()
 NSGS+=('EternalTerminal')
 VCN="MainNet"
+TMUX_SCRIPT="tmux-default.bash"
 
 # if we are not in an OCI instance, quit
 curl --connect-timeout 5 -s -H "Authorization: Bearer Oracle" http://169.254.169.254/opc/v2/instance/id || exit
 echo ""
 INSTANCE_NAME="$(curl -s -H "Authorization: Bearer Oracle" http://169.254.169.254/opc/v2/instance/displayName)"
 
-# this section is now in the first setup script
-#source /etc/os-release
-#if [[ "$NAME" == "Oracle Linux Server" ]]; then
-#  if [[ "$VERSION_ID" == 8* ]]; then
-#    echo "Oracle Linux 8"
-#    sudo dnf install oraclelinux-developer-release-el8
-#    sudo dnf install oracle-epel-release-el8
-#    sudo dnf -y install python36-oci-cli
-#  elif [[ "$VERSION_ID" == 9* ]]; then
-#    echo "Oracle Linux 9"
-#    sudo dnf install oraclelinux-developer-release-el9
-#    sudo dnf install oracle-epel-release-el9
-#    sudo dnf -y install python39-oci-cli
-#  else
-#    echo "### version not supported: $VERSION_ID"
-#    exit
-#  fi
-#else
-#  echo "OS not supported: $NAME"
-#  exit
-#fi
+# use ~/.bin instead of ~/bin
+sed --in-place=.bak -e 's/\$HOME\/bin/$HOME\/.bin/' "${HOME}"/.bashrc
 
-sudo dnf -y install et
-if [ "${INSTANCE_NAME}" = "frankfurt" ]; then
-  NSGS+=('HTTP')
-  sudo dnf -y install httpd
-  sudo systemctl --now enable httpd
-  sudo firewall-cmd --permanent --zone=public --add-port=80/tcp
+# use tmux on interactive shells
+cat >> "${HOME}"/.bash_profile << EOF
+if [[ -z \$TMUX ]] && [[ -n \$SSH_TTY ]]; then
+	  "\${HOME}/.bin/${TMUX_SCRIPT}"
 fi
-sudo systemctl --now enable et
-sudo firewall-cmd --permanent --zone=public --add-port=2022/tcp
-sudo firewall-cmd --reload
+EOF
 
+# install Oh my Tmux!
+cd
+git clone --single-branch https://github.com/gpakosz/.tmux.git
+ln -s -f .tmux/.tmux.conf
+cp .tmux/.tmux.conf.local .
+sed --in-place=.bak -e 's/^#set -g mouse on/set -g mouse on/' "${HOME}"/.tmux.conf.local
+
+# prepare for using OCI CLI with instance principal authorization
 cat >> ~/.bash_profile << EOF
 export OCI_CLI_AUTH="instance_principal"
 EOF
-
+# either source ~/.bash_profile or set OCI_CLI_AUTH
 export OCI_CLI_AUTH="instance_principal"
+
 INSTANCE_ID=$(curl -s -H "Authorization: Bearer Oracle" http://169.254.169.254/opc/v2/instance/id)
 
+#
 # download scripts from object storage
-BUCKET_NAME="InstanceScripts"
-NAMESPACE=$(oci os ns get --query "data" | tr -d '"')
-
+#
+# make sure the target directories for the downloaded files exist
 if [ ! -d "${HOME}/.oci" ]; then
   mkdir "${HOME}/.oci"
 fi
@@ -62,6 +50,7 @@ if [ ! -d "${HOME}/.bin" ]; then
   mkdir "${HOME}/.bin"
 fi
 
+# setup the file list
 FILE=();                         LOCATION=();              PERMS=();
 FILE+=('instancectl.bash');      LOCATION+=("$HOME/.bin"); PERMS+=('755');
 FILE+=('oci_cli_rc');            LOCATION+=("$HOME/.oci"); PERMS+=('600');
@@ -75,6 +64,8 @@ else
   FILE+=('register-to-osmh.bash'); LOCATION+=("$HOME/.bin"); PERMS+=('755');
 fi
 
+BUCKET_NAME="InstanceScripts"
+NAMESPACE=$(oci os ns get --query "data" | tr -d '"')
 for i in "${!FILE[@]}"; do
   printf "\n%-22s %15s %3s\n" "${FILE[$i]}" "${LOCATION[$i]}" "${PERMS[$i]}"
   oci os object get -bn "${BUCKET_NAME}" \
