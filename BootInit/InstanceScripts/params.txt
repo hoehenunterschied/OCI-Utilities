@@ -1,0 +1,21 @@
+# points to installation of Oracle OCI CLI
+OCICLI_DIR="${HOME}/tmp/oracle-cli"
+
+# since COMPARTMENT_ID is unique, it takes precedence over
+# COMPARTMENT_NAME if set. If only COMPARTMENT_NAME is set
+# and muliple compartments with this name exist, the script
+# takes the first compartment returned by search
+COMPARTMENT_ID="ocid1.compartment.oc1..aaaaaaaaqfdeufdafms6trnedq6wnpwhwxnvynas6mqydvz7dsxciffyiana"
+COMPARTMENT_NAME="Ralf_lange"
+
+# when start or stop is given as the only parameter to
+# the script, the command is only applied to resources
+# with matching tags. When a name or partial name is given
+# tags need not to match.
+TAG_NAMESPACE="ResourceControl"
+TAG_KEY="instancectl"
+TAG_VALUE="true"
+
+# the list of resource types the script works on
+#RESOURCES_TO_PROCESS="instance,dbsystem,autonomousdatabase"
+RESOURCES_TO_PROCESS="instance"
