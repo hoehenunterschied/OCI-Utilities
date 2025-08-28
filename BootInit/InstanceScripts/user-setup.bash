@@ -100,7 +100,7 @@ PUBLIC_IP="$(oci network vnic update --force --vnic-id "$VNIC_ID" --nsg-ids "$NS
 
 if [ "${INSTANCE_NAME}" = "frankfurt" ]; then
   # set defined tag ResourceControl.keep = true
-  oci compute instance update --force --instance-id "${INSTANCE_ID}" --defined-tags "$(oci-metadata --json --value-only --get definedTags | sed "s/'/\"/g" | jq '.ResourceControl.keepup = "true"')"
+  oci compute instance update --force --instance-id "${INSTANCE_ID}" --defined-tags "$(oci-metadata --json --value-only --get definedTags | sed "s/'/\"/g" | jq '.ResourceControl.keepup = "true" | .ResourceControl.instancectl = "false"')"
 
   # create DNS entry
   ZONE_ID=$(oci dns zone list \
