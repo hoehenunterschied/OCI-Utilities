@@ -2,6 +2,7 @@
 # convert this file with
 #  cat <filename> | base64 --wrap 0
 # and put it as user_data in the launch script
+exec > /tmp/boot-init-output.txt 2>&1
 
 source /etc/os-release
 if [[ "$NAME" == "Oracle Linux Server" ]]; then

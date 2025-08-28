@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
-id > /tmp/from_user-stage_script.txt
+
+# redirect all output to a file
+exec > /tmp/user-setup-output.txt 2>&1
 
 DNSHOSTNAME="rpiconnect"
 DNSDOMAIN="katogana.de"
