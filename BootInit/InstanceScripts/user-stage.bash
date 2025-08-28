@@ -11,26 +11,27 @@ curl --connect-timeout 5 -s -H "Authorization: Bearer Oracle" http://169.254.169
 echo ""
 INSTANCE_NAME="$(curl -s -H "Authorization: Bearer Oracle" http://169.254.169.254/opc/v2/instance/displayName)"
 
-source /etc/os-release
-if [[ "$NAME" == "Oracle Linux Server" ]]; then
-  if [[ "$VERSION_ID" == 8* ]]; then
-    echo "Oracle Linux 8"
-    sudo dnf install oraclelinux-developer-release-el8
-    sudo dnf install oracle-epel-release-el8
-    sudo dnf -y install python36-oci-cli
-  elif [[ "$VERSION_ID" == 9* ]]; then
-    echo "Oracle Linux 9"
-    sudo dnf install oraclelinux-developer-release-el9
-    sudo dnf install oracle-epel-release-el9
-    sudo dnf -y install python39-oci-cli
-  else
-    echo "### version not supported: $VERSION_ID"
-    exit
-  fi
-else
-  echo "OS not supported: $NAME"
-  exit
-fi
+# this section is now in the first setup script
+#source /etc/os-release
+#if [[ "$NAME" == "Oracle Linux Server" ]]; then
+#  if [[ "$VERSION_ID" == 8* ]]; then
+#    echo "Oracle Linux 8"
+#    sudo dnf install oraclelinux-developer-release-el8
+#    sudo dnf install oracle-epel-release-el8
+#    sudo dnf -y install python36-oci-cli
+#  elif [[ "$VERSION_ID" == 9* ]]; then
+#    echo "Oracle Linux 9"
+#    sudo dnf install oraclelinux-developer-release-el9
+#    sudo dnf install oracle-epel-release-el9
+#    sudo dnf -y install python39-oci-cli
+#  else
+#    echo "### version not supported: $VERSION_ID"
+#    exit
+#  fi
+#else
+#  echo "OS not supported: $NAME"
+#  exit
+#fi
 
 sudo dnf -y install et
 if [ "${INSTANCE_NAME}" = "frankfurt" ]; then
@@ -61,10 +62,13 @@ if [ ! -d "${HOME}/.bin" ]; then
   mkdir "${HOME}/.bin"
 fi
 
-FILE=();                    LOCATION=();          PERMS=();
-FILE+=('instancectl.bash'); LOCATION+=("$HOME/.bin"); PERMS+=('755');
-FILE+=('params.txt');       LOCATION+=("$HOME/.bin"); PERMS+=('600');
-FILE+=('oci_cli_rc');       LOCATION+=("$HOME/.oci"); PERMS+=('600');
+FILE=();                         LOCATION=();              PERMS=();
+FILE+=('instancectl.bash');      LOCATION+=("$HOME/.bin"); PERMS+=('755');
+FILE+=('oci_cli_rc');            LOCATION+=("$HOME/.oci"); PERMS+=('600');
+FILE+=('oci-connectivity.bash'); LOCATION+=("$HOME/.bin"); PERMS+=('755');
+FILE+=('osmh-logs.bash');        LOCATION+=("$HOME/.bin"); PERMS+=('755');
+FILE+=('params.txt');            LOCATION+=("$HOME/.bin"); PERMS+=('600');
+FILE+=('tmux-default.bash');     LOCATION+=("$HOME/.bin"); PERMS+=('755');
 if [ "${INSTANCE_NAME}" = "frankfurt" ]; then
   FILE+=('rpi-connect.bash'); LOCATION+=("$HOME/.bin"); PERMS+=('755');
 else

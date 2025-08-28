@@ -28,17 +28,16 @@ BUCKET_NAME="InstanceScripts"
 NAMESPACE=$(oci os ns get --query "data" | tr -d '"')
 oci os object get -bn "${BUCKET_NAME}" \
                   -ns "${NAMESPACE}" \
-                  --file /tmp/setup.bash \
-                  --name setup.bash \
-    && chmod 755 /tmp/setup.bash
+                  --file /tmp/root-stage.bash \
+                  --name root-stage.bash \
+    && chmod 755 /tmp/root-stage.bash
 
 oci os object get -bn "${BUCKET_NAME}" \
                   -ns "${NAMESPACE}" \
-                  --file /tmp/boot-init.bash \
-                  --name boot-init.bash \
-    && chmod 755 /tmp/boot-init.bash
+                  --file /tmp/user-stage.bash \
+                  --name user-stage.bash \
+    && chmod 755 /tmp/user-stage.bash
 
-/tmp/boot-init.bash
-runuser -u opc /tmp/setup.bash
-runuser -u opc
-id > /tmp/id.txt
+/tmp/root-stage.bash
+runuser -u opc /tmp/user-stage.bash
+runuser -u opc id > /tmp/id.txt
