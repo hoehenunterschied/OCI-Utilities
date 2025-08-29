@@ -125,15 +125,21 @@ echo "### cat > \"\${ATJOB_FILE}\" << EOF"
 cat > "${ATJOB_FILE}" << EOF
 #!/usr/bin/env bash
 
+exec > /tmp/atjob-output.txt 2>&1
 EOF
 if [ "${INSTANCE_NAME}" = "frankfurt" ]; then
   echo "### echo \"sudo firewall-cmd --permanent --zone=public --add-port=80/tcp\" >> \"\${ATJOB_FILE}\""
+  echo "echo \"### sudo firewall-cmd --permanent --zone=public --add-port=80/tcp\"" >> "${ATJOB_FILE}"
   echo "sudo firewall-cmd --permanent --zone=public --add-port=80/tcp" >> "${ATJOB_FILE}"
 fi
 echo "### echo \"sudo firewall-cmd --permanent --zone=public --add-port=2022/tcp\" >> \"\${ATJOB_FILE}\""
+echo "echo \"### sudo firewall-cmd --permanent --zone=public --add-port=2022/tcp\"" >> "${ATJOB_FILE}"
 echo "sudo firewall-cmd --permanent --zone=public --add-port=2022/tcp" >> "${ATJOB_FILE}"
+echo "echo \"### sudo firewall-cmd --reload\"" >> "${ATJOB_FILE}"
 echo "### echo \"sudo firewall-cmd --reload\" >> \"\${ATJOB_FILE}\""
 echo "sudo firewall-cmd --reload" >> "${ATJOB_FILE}"
 echo "### chmod +x "${ATJOB_FILE}""
 chmod +x "${ATJOB_FILE}"
+echo "### echo \"\${ATJOB_FILE}\" | at now + 1 minute"
+echo "${ATJOB_FILE}" | at now + 1 minute
 echo "### user-setup script finished"

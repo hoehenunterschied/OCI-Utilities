@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 NAME=();                 OS=();                       CPU=();
-#NAME+=('quicktest');     OS+=('Oracle Linux 9');      CPU+=('Ampere');
+NAME+=('quicktest');     OS+=('Oracle Linux 9');      CPU+=('Ampere');
 #NAME+=('crashandburn');  OS+=('Oracle Linux 9');      CPU+=('Ampere');
 #NAME+=('frankfurt');     OS+=('Oracle Linux 9');      CPU+=('Ampere');
 #NAME+=('ol9arm1');        OS+=('Oracle Linux 9');      CPU+=('Ampere');
@@ -9,7 +9,7 @@ NAME=();                 OS=();                       CPU=();
 #NAME+=('ol9arm3');        OS+=('Oracle Linux 9');      CPU+=('Ampere');
 #NAME+=('ol9arm4');        OS+=('Oracle Linux 9');      CPU+=('Ampere');
 #NAME+=('ol9arm5');        OS+=('Oracle Linux 9');      CPU+=('Ampere');
-NAME+=('ol8arm1');        OS+=('Oracle Linux 8');      CPU+=('Ampere');
+#NAME+=('ol8arm1');        OS+=('Oracle Linux 8');      CPU+=('Ampere');
 #NAME+=('ol8arm2');        OS+=('Oracle Linux 8');      CPU+=('Ampere');
 #NAME+=('ol8arm3');        OS+=('Oracle Linux 8');      CPU+=('Ampere');
 #NAME+=('ol8arm4');        OS+=('Oracle Linux 8');      CPU+=('Ampere');
