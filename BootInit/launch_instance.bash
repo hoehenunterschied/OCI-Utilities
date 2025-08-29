@@ -1,9 +1,21 @@
 #!/usr/bin/env bash
 
-NAME=();                 OS=();                       CPU=();
+NAME=(); OS=(); CPU=();
 NAME+=('quicktest');     OS+=('Oracle Linux 9');      CPU+=('Ampere');
 #NAME+=('crashandburn');  OS+=('Oracle Linux 9');      CPU+=('Ampere');
+
 #NAME+=('frankfurt');     OS+=('Oracle Linux 9');      CPU+=('Ampere');
+
+#NAME+=('brahms');   OS+=('Oracle Linux 8'); CPU+=('AMD');
+#NAME+=('mahler');   OS+=('Oracle Linux 8'); CPU+=('AMD');
+#NAME+=('dvorak');   OS+=('Oracle Linux 8'); CPU+=('AMD');
+#NAME+=('haydn');    OS+=('Oracle Linux 8'); CPU+=('AMD');
+#NAME+=('schubert'); OS+=('Oracle Linux 8'); CPU+=('AMD');
+#NAME+=('wagner');   OS+=('Oracle Linux 8'); CPU+=('AMD');
+#NAME+=('liszt');    OS+=('Oracle Linux 8'); CPU+=('AMD');
+#NAME+=('vivaldi');  OS+=('Oracle Linux 8'); CPU+=('AMD');
+#NAME+=('chopin');   OS+=('Oracle Linux 8'); CPU+=('AMD');
+
 #NAME+=('ol9arm1');        OS+=('Oracle Linux 9');      CPU+=('Ampere');
 #NAME+=('ol9arm2');        OS+=('Oracle Linux 9');      CPU+=('Ampere');
 #NAME+=('ol9arm3');        OS+=('Oracle Linux 9');      CPU+=('Ampere');
