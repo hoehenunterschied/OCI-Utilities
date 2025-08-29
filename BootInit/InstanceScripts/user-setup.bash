@@ -115,3 +115,25 @@ if [ "${INSTANCE_NAME}" = "frankfurt" ]; then
       --zone-name-or-id ${ZONE_ID} \
       --items "[{\"domain\":\"${DNSHOSTNAME}.${DNSDOMAIN}\",\"rdata\":\"${PUBLIC_IP}\" ,\"rtype\":\"A\",\"ttl\":30}]"
 fi
+
+echo "### it seems to be a problem (at least in Oracle Linux 8)"
+echo "### to execute firewall-cmd from within boot-init."
+echo "### Trying to do this via at job"
+echo "### ATJOB_FILE="/tmp/atjob.bash""
+ATJOB_FILE="/tmp/atjob.bash"
+echo "### cat > \"\${ATJOB_FILE}\" << EOF"
+cat > "${ATJOB_FILE}" << EOF
+#!/usr/bin/env bash
+
+EOF
+if [ "${INSTANCE_NAME}" = "frankfurt" ]; then
+  echo "### echo \"sudo firewall-cmd --permanent --zone=public --add-port=80/tcp\" >> \"\${ATJOB_FILE}\""
+  echo "sudo firewall-cmd --permanent --zone=public --add-port=80/tcp" >> "${ATJOB_FILE}"
+fi
+echo "### echo \"sudo firewall-cmd --permanent --zone=public --add-port=2022/tcp\" >> \"\${ATJOB_FILE}\""
+echo "sudo firewall-cmd --permanent --zone=public --add-port=2022/tcp" >> "${ATJOB_FILE}"
+echo "### echo \"sudo firewall-cmd --reload\" >> \"\${ATJOB_FILE}\""
+echo "sudo firewall-cmd --reload" >> "${ATJOB_FILE}"
+echo "### chmod +x "${ATJOB_FILE}""
+chmod +x "${ATJOB_FILE}"
+echo "### user-setup script finished"
