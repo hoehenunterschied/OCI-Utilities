@@ -33,7 +33,7 @@ idiot_counter()
 INSTANCE_ID=$(curl -s -H "Authorization: Bearer Oracle" http://169.254.169.254/opc/v2/instance/id)
 AGENT_CONFIG="{\"allPluginsDisabled\": false,\"managementDisabled\": false,\"monitoringDisabled\": false,\"pluginsConfig\": [{\"desiredState\": \"ENABLED\",\"name\": \"OS Management Hub Agent\"}]}"
 
-ARCH_TYPE="$(uname -p)"
+ARCH_TYPE="$(uname -m)"
 ARCH_TYPE="${ARCH_TYPE^^}"
 source /etc/os-release
 if [[ "$VERSION_ID" == 8* ]]; then
