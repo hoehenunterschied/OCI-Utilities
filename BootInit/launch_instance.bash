@@ -58,7 +58,11 @@ cd "$(dirname "$(realpath "$0")")"
 ########################################
 
 # get tenancy id
-TENANCY_ID=$(oci --cli-rc-file /dev/null iam availability-domain list --query "data[*].\"compartment-id\" | [0]" | tr -d '"')
+if TENANCY_ID="$(curl --connect-timeout 3 -s -H "Authorization: Bearer Oracle" http://169.254.169.254/opc/v2/instance/tenantId)"; then
+  echo "inside OCI instance"
+else
+  TENANCY_ID=$(oci --cli-rc-file /dev/null iam availability-domain list --query "data[*].\"compartment-id\" | [0]" | tr -d '"')
+fi
 echo "         TENANCY_ID : $TENANCY_ID"
 
 # get compartment id
@@ -66,7 +70,7 @@ COMPARTMENT_ID=$(oci --cli-rc-file /dev/null iam compartment list --all --compar
 echo "     COMPARTMENT_ID : $COMPARTMENT_ID"
 
 # get availability domain
-AVAILABILITY_DOMAIN=$(oci --cli-rc-file /dev/null iam availability-domain list --query "data[*].name | [$(($AVAILABILITY_DOMAIN_NUMBER - 1))]" | tr -d '"')
+AVAILABILITY_DOMAIN=$(oci --cli-rc-file /dev/null iam availability-domain list --compartment-id "${COMPARTMENT_ID}" --query "data[*].name | [$(($AVAILABILITY_DOMAIN_NUMBER - 1))]" | tr -d '"')
 echo "AVAILABILITY_DOMAIN : $AVAILABILITY_DOMAIN"
 
 # get VCN id
