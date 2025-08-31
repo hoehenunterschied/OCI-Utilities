@@ -52,7 +52,10 @@ printf '### INSTANCE_ID: %s\n' "${INSTANCE_ID}"
 printf '###   ARCH_TYPE: %s\n' "${ARCH_TYPE}" 
 printf '###   OS_FAMILY: %s\n' "${OS_FAMILY}" 
 printf '###  PROFILE_ID: %s\n\n' "${PROFILE_ID}" 
-idiot_counter
+
+if [[ "${DONT_ASK}" != "true"  ]]; then
+  idiot_counter
+fi
 
 # enable OS Management Hub agent
 WORKREQUEST_ID=$(oci compute instance update --force --agent-config "${AGENT_CONFIG}" --instance-id "${INSTANCE_ID}" --query "\"opc-work-request-id\"" | tr -d '"')
