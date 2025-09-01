@@ -118,6 +118,13 @@ if [ "${INSTANCE_NAME}" = "frankfurt" ]; then
       --items "[{\"domain\":\"${DNSHOSTNAME}.${DNSDOMAIN}\",\"rdata\":\"${PUBLIC_IP}\" ,\"rtype\":\"A\",\"ttl\":30}]"
 fi
 
+echo "### sudo systemctl start from-boot-init.service"
+sudo systemctl start from-boot-init.service
+
+echo "### user-setup script finished"
+exit
+
+# notice the exit above
 echo "### it seems to be a problem (at least in Oracle Linux 8)"
 echo "### to execute firewall-cmd from within boot-init."
 echo "### Trying to do this via at job"

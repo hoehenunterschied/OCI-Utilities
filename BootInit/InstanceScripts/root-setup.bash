@@ -63,15 +63,41 @@ fi
 echo "### the firewall configuration"
 echo "### systemctl start firewalld"
           systemctl start firewalld
-echo "### root-setup.bash finished"
-## do this in the user-setup script to give
-## the firewalld even more time
-#if [ "${INSTANCE_NAME}" = "frankfurt" ]; then
-#  echo "### firewall-cmd --permanent --zone=public --add-port=80/tcp"
-#            firewall-cmd --permanent --zone=public --add-port=80/tcp
-#fi
-#echo "### firewall-cmd --permanent --zone=public --add-port=2022/tcp"
-#          firewall-cmd --permanent --zone=public --add-port=2022/tcp
-#echo "### firewall-cmd --reload"
-#          firewall-cmd --reload
 
+# schedule a job to execute some firewall-cmd
+echo "### ATJOB_FILE="/usr/local/bin/atjob.bash""
+ATJOB_FILE="/usr/local/bin/atjob.bash"
+echo "### cat > \"\${ATJOB_FILE}\" << EOF"
+cat > "${ATJOB_FILE}" << EOF
+#!/usr/bin/env bash
+
+exec > /tmp/atjob-output.txt 2>&1
+EOF
+if [ "${INSTANCE_NAME}" = "frankfurt" ]; then
+  echo "### echo \"firewall-cmd --permanent --zone=public --add-port=80/tcp\" >> \"\${ATJOB_FILE}\""
+  echo "echo \"### firewall-cmd --permanent --zone=public --add-port=80/tcp\"" >> "${ATJOB_FILE}"
+  echo "firewall-cmd --permanent --zone=public --add-port=80/tcp" >> "${ATJOB_FILE}"
+fi
+echo "### echo \"firewall-cmd --permanent --zone=public --add-port=2022/tcp\" >> \"\${ATJOB_FILE}\""
+echo "echo \"### firewall-cmd --permanent --zone=public --add-port=2022/tcp\"" >> "${ATJOB_FILE}"
+echo "firewall-cmd --permanent --zone=public --add-port=2022/tcp" >> "${ATJOB_FILE}"
+echo "echo \"### firewall-cmd --reload\"" >> "${ATJOB_FILE}"
+echo "### echo \"firewall-cmd --reload\" >> \"\${ATJOB_FILE}\""
+echo "firewall-cmd --reload" >> "${ATJOB_FILE}"
+echo "### chmod +x "${ATJOB_FILE}""
+chmod +x "${ATJOB_FILE}"
+
+SERVICE_FILE="/etc/systemd/system/from-boot-init.service"
+echo "### cat > \"\${SERVICE_FILE}\" << EOF"
+cat > "${SERVICE_FILE}" << EOF
+[Unit]
+Description=Run my job
+
+[Service]
+Type=oneshot
+ExecStart=${ATJOB_FILE}
+EOF
+systemctl daemon-reload
+systemctl start from-boot-init.service
+
+echo "### root-setup.bash finished"
