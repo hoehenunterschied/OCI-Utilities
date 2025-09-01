@@ -29,7 +29,7 @@ if [[ "$NAME" == "Oracle Linux Server" ]]; then
     echo "### dnf install oracle-epel-release-el10"
     dnf install oracle-epel-release-el10
     echo "### dnf -y config-manager --enable ol10_u0_developer_EPEL"
-    #dnf -y config-manager --enable ol10_u0_developer_EPEL
+    dnf -y config-manager --enable ol10_u0_developer_EPEL
   else
     echo "### version not supported: $VERSION_ID"
     exit
