@@ -63,8 +63,9 @@ FILE+=('tmux-default.bash');     LOCATION+=("$HOME/.bin"); PERMS+=('755');
 if [ "${INSTANCE_NAME}" = "frankfurt" ]; then
   FILE+=('rpi-connect.bash'); LOCATION+=("$HOME/.bin"); PERMS+=('755');
 else
-  FILE+=('register-to-osmh.bash'); LOCATION+=("$HOME/.bin"); PERMS+=('755');
-  FILE+=('self-terminate.bash');   LOCATION+=("$HOME/.bin"); PERMS+=('755');
+  FILE+=('register-to-osmh.bash');     LOCATION+=("$HOME/.bin"); PERMS+=('755');
+  FILE+=('unregister-from-osmh.bash'); LOCATION+=("$HOME/.bin"); PERMS+=('755');
+  FILE+=('self-terminate.bash');       LOCATION+=("$HOME/.bin"); PERMS+=('755');
 fi
 
 BUCKET_NAME="InstanceScripts"
