@@ -22,6 +22,14 @@ if [[ "$NAME" == "Oracle Linux Server" ]]; then
     dnf install oracle-epel-release-el9
     echo "### dnf -y config-manager --enable ol9_developer_EPEL"
     dnf -y config-manager --enable ol9_developer_EPEL
+  elif [[ "$VERSION_ID" == 10* ]]; then
+    echo "### Oracle Linux 10"
+    echo "### dnf install oraclelinux-developer-release-el10"
+    dnf install oraclelinux-developer-release-el10
+    echo "### dnf install oracle-epel-release-el10"
+    dnf install oracle-epel-release-el10
+    echo "### dnf -y config-manager --enable ol10_u0_developer_EPEL"
+    #dnf -y config-manager --enable ol10_u0_developer_EPEL
   else
     echo "### version not supported: $VERSION_ID"
     exit
@@ -32,8 +40,14 @@ else
 fi
 
 # install tmux, git, htop and Eternal Terminal
-echo "### dnf -y install tmux git htop et"
-dnf -y install tmux git htop et
+echo "### dnf -y install tmux"
+          dnf -y install tmux
+echo "### dnf -y install git"
+          dnf -y install git           
+echo "### dnf -y install htop"
+          dnf -y install htop     
+echo "### dnf -y install et"
+          dnf -y install et
 echo "### systemctl --now enable et"
 systemctl --now enable et
 
