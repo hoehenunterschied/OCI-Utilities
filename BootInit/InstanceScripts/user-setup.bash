@@ -118,9 +118,6 @@ if [ "${INSTANCE_NAME}" = "frankfurt" ]; then
       --items "[{\"domain\":\"${DNSHOSTNAME}.${DNSDOMAIN}\",\"rdata\":\"${PUBLIC_IP}\" ,\"rtype\":\"A\",\"ttl\":30}]"
 fi
 
-echo "### sudo systemctl start from-boot-init.service"
-sudo systemctl start from-boot-init.service
-
 echo "### user-setup script finished"
 exit
 

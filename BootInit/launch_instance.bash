@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 
 NAME=(); OS=(); CPU=();
-NAME+=('ol10');     OS+=('Oracle Linux 10');      CPU+=('Ampere');
-#NAME+=('quicktest');     OS+=('Oracle Linux 9');      CPU+=('Ampere');
+NAME+=('quicktest');     OS+=('Oracle Linux 9');      CPU+=('Ampere');
 #NAME+=('crashandburn');  OS+=('Oracle Linux 9');      CPU+=('Ampere');
 
 #NAME+=('frankfurt');     OS+=('Oracle Linux 9');      CPU+=('Ampere');

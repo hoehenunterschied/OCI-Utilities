@@ -71,7 +71,9 @@ echo "### cat > \"\${ATJOB_FILE}\" << EOF"
 cat > "${ATJOB_FILE}" << EOF
 #!/usr/bin/env bash
 
-exec > /tmp/atjob-output.txt 2>&1
+exec >> /tmp/atjob-output.txt 2>&1
+
+echo "### $(date +"%Y%m%d-%T")"
 EOF
 if [ "${INSTANCE_NAME}" = "frankfurt" ]; then
   echo "### echo \"firewall-cmd --permanent --zone=public --add-port=80/tcp\" >> \"\${ATJOB_FILE}\""
@@ -97,7 +99,9 @@ Description=Run my job
 Type=oneshot
 ExecStart=${ATJOB_FILE}
 EOF
+echo "### systemctl daemon-reload"
 systemctl daemon-reload
+echo "### systemctl start from-boot-init.service"
 systemctl start from-boot-init.service
 
 echo "### root-setup.bash finished"
