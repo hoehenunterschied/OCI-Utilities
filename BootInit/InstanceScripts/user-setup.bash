@@ -5,10 +5,14 @@ exec > /tmp/user-setup-output.txt 2>&1
 
 DNSHOSTNAME="rpiconnect"
 DNSDOMAIN="katogana.de"
-NSGS=()
-NSGS+=('EternalTerminal')
 VCN="MainNet"
 TMUX_SCRIPT="tmux-default.bash"
+
+NSGS=()
+NSGS+=('EternalTerminal')
+if [ "${INSTANCE_NAME}" = "frankfurt" ]; then
+  NSGS+=('HTTP')
+fi
 
 # if we are not in an OCI instance, quit
 curl --connect-timeout 5 -s -H "Authorization: Bearer Oracle" http://169.254.169.254/opc/v2/instance/id || exit
@@ -84,17 +88,13 @@ VCN_ID=$(oci network vcn list --all --query "data[?\"display-name\"=='${VCN}']|[
 # VNIC
 VNIC_ID=$(oci compute instance list-vnics --instance-id "${INSTANCE_ID}" --query "data[].id|[0]" | tr -d '"')
 # NSG
-NSG_LIST="[ \""
-if [ "${INSTANCE_NAME}" = "frankfurt" ]; then
-  for f in $(oci network nsg list --all --query "data[?(\"display-name\"=='EternalTerminal' || \"display-name\" == 'HTTP') && \"vcn-id\" == '$VCN_ID'].id" | jq -c ".[]" | tr -d '"'); do
-    NSG_LIST="${NSG_LIST}$f\", \""
-  done
-else
-  for f in $(oci network nsg list --all --query "data[?(\"display-name\"=='EternalTerminal') && \"vcn-id\" == '$VCN_ID'].id" | jq -c ".[]" | tr -d '"'); do
-    NSG_LIST="${NSG_LIST}$f\", \""
-  done
-fi
-NSG_LIST="${NSG_LIST%, \"}]"
+NSG_LIST="[ "
+for i in "${NSGS[@]}"; do
+  NSG_ID="$(oci network nsg list --all --query "data[?(\"display-name\"=='${i}') && \"vcn-id\" == '${VCN_ID}']|[0].id")"
+  NSG_LIST="${NSG_LIST}${NSG_ID}, "
+done
+NSG_LIST="${NSG_LIST%, } ]"
+echo "### NSG_LIST: >>>${NSG_LIST}<<<"
 
 
 # set the NSGs and retrieve the public ip address
