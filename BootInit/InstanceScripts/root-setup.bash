@@ -60,6 +60,12 @@ if [ "${INSTANCE_NAME}" = "frankfurt" ]; then
   systemctl --now enable httpd
 fi
 
+if [[ "$VERSION_ID" == 10* ]]; then
+    echo "### dnf -y config-manager --disable ol10_u0_developer_EPEL"
+    dnf -y config-manager --disable ol10_u0_developer_EPEL
+fi
+
+
 echo "### the firewall configuration"
 echo "### systemctl start firewalld"
           systemctl start firewalld
