@@ -53,4 +53,4 @@ comment out the parts that use DNSHOSTNAME, DNSDOMAIN
 VCN
 BUCKET_NAME
 FILE(), LOCATION(), PERMS()
-search for NSG_LIST= currently the NSG names are hard-coded to be EternalTerminal and HTTP
+NSGS
