@@ -80,7 +80,7 @@ for i in "${!FILE[@]}"; do
 done
 
 # VCN
-VCN_ID=$(oci network vcn list --all --query "data[?\"display-name\"=='MainNet']|[0].id" | tr -d '"')
+VCN_ID=$(oci network vcn list --all --query "data[?\"display-name\"=='${VCN}']|[0].id" | tr -d '"')
 # VNIC
 VNIC_ID=$(oci compute instance list-vnics --instance-id "${INSTANCE_ID}" --query "data[].id|[0]" | tr -d '"')
 # NSG
