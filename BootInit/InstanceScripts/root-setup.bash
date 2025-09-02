@@ -99,7 +99,7 @@ SERVICE_FILE="/etc/systemd/system/from-boot-init.service"
 echo "### cat > \"\${SERVICE_FILE}\" << EOF"
 cat > "${SERVICE_FILE}" << EOF
 [Unit]
-Description=Run my job
+Description=one-time execution. Commands in ${ATJOB_FILE} fail when executed in boot-init
 
 [Service]
 Type=oneshot
