@@ -41,6 +41,8 @@ oci os object get -bn "${BUCKET_NAME}" \
                   --name user-setup.bash \
     && chmod 755 /tmp/user-setup.bash
 
-/tmp/root-setup.bash
-runuser -u opc /tmp/user-setup.bash
-runuser -u opc id > /tmp/id.txt
+echo "### /tmp/root-setup.bash"
+          /tmp/root-setup.bash
+echo "### runuser -u opc /tmp/user-setup.bash"
+          runuser -u opc /tmp/user-setup.bash
+echo "### end of boot-init"
