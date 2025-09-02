@@ -62,3 +62,45 @@ nc -zv $STATION $STATION_MIRROR_PORT &>/dev/null ; [ $? == 0 ] && echo "Success"
 Known Issues
 ============
 https://docs.oracle.com/en-us/iaas/osmh/doc/known-issues.htm
+
+Change the checkUpdatesInterval
+===============================
+value can be edited in:
+/var/lib/oracle-cloud-agent/plugins/oci-osmh/osmh-agent/stateDir/config.yml
+
+Manually enable the OS Management Hub Agent plugin and register profile
+=======================================================================
+# https://community.oracle.com/customerconnect/discussion/826614/osmh-how-to-enable-the-osmh-plugin-using-oci-cli
+
+# On the OCI Instance:
+curl -H "Authorization: Bearer Oracle" -L http://169.254.169.254/opc/v2/instance/agentConfig > agent_config.json
+
+# then change agent_config.json to:
+{
+  "allPluginsDisabled": false,
+  "managementDisabled": false,
+  "monitoringDisabled": false
+  "pluginsConfig": [
+    {
+      "desiredState": "ENABLED",
+      "name": "OS Management Hub Agent"
+    }
+  ]
+}
+
+# Update the plugin status:
+oci --auth instance_principal compute instance update --agent-config file://<path-to-agent_config.json-file> --instance-id <instance_ocid>
+
+# Check plugin status again with:
+curl -H "Authorization: Bearer Oracle" -L http://169.254.169.254/opc/v2/instance/agentConfig
+
+# attach profile to instance
+oci os-management-hub managed-instance attach-profile --managed-instance-id <managed_instance_ocid> --profile-id <profile_ocid>
+# ol9arm: ocid1.osmhprofile.oc1.eu-frankfurt-1.amaaaaaattkvkkiadxha3nmuf3uypfll66l57t6peyjjkk3vmrudvjzgsqva
+# ol8arm: ocid1.osmhprofile.oc1.eu-frankfurt-1.amaaaaaattkvkkiab6gmdwyqwgkom4mt4sesvnnilsdplp7dyynjdkpt2rla
+# ol9x86: ocid1.osmhprofile.oc1.eu-frankfurt-1.amaaaaaattkvkkia7apf7ajc6p5denfbexamkqrv4b4zzxzplfkceflktqqa
+# ol8x86: ocid1.osmhprofile.oc1.eu-frankfurt-1.amaaaaaattkvkkiaccji63x3gtenphndwcgbxxugzu655c3znzcmlym5ijuq
+
+# Restart the Oracle Cloud Agent service after attaching the profile
+systemctl restart oracle-cloud-agent.service
+
