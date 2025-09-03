@@ -11,7 +11,7 @@ instances get a public IP address
 load the scripts root-setup.bash, user-setup.bash and the scripts referenced by FILE[@] in user-setup.bash into the bucket BUCKET_NAME. You can use the file upload-instance-script.bash for uploading.
 
 ###############################
-### Runs on your local computer
+### Runs on local computer
 ###############################
 
 launch_instance.bash
@@ -23,6 +23,8 @@ COMPARTMENT_NAME
 VCN_NAME
 SUBNET_NAME
 AVAILABILITY_DOMAIN_NUMBER
+BUCKET_NAME
+FILE_LIST
 
 no '%' character at the end:
 "metadatá": { "user_data": "<set to the output of cat boot-init.bash | base64 --wrap 0>" }
@@ -31,6 +33,10 @@ upload-instance-script.bash
 ===========================
 BUCKET_NAME
 
+check_md5.bash
+==============
+BUCKET_NAME
+FILE_LIST
 
 ###############################
 ### Runs on the OCI instance
