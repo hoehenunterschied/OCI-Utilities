@@ -26,9 +26,6 @@ AVAILABILITY_DOMAIN_NUMBER
 BUCKET_NAME
 FILE_LIST
 
-no '%' character at the end:
-"metadatá": { "user_data": "<set to the output of cat boot-init.bash | base64 --wrap 0>" }
-
 upload-instance-script.bash
 ===========================
 BUCKET_NAME
