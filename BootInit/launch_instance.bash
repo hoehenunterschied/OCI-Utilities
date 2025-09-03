@@ -135,9 +135,9 @@ for FILE in "${FILE_LIST[@]}"; do
   #printf "%30s %s %s\n" "${OBJECT_NAME}" "${OBJECT_MD5}" "${FILE_MD5}"
   if [[ "${OBJECT_MD5}" != "${FILE_MD5}" ]]; then
     UPTODATE="false"
-    echo -e "${RED}${OBJECT_NAME}${NOCOLOR}"
+    printf "%7s %b%s%b\n" "upload" "${RED}" "${OBJECT_NAME}" "${NOCOLOR}"
   else
-    echo -e "${GREEN}${OBJECT_NAME}${NOCOLOR}"
+    printf "%7s %b%s%b\n" "" "${GREEN}" "${OBJECT_NAME}" "${NOCOLOR}"
   fi
 done
 
