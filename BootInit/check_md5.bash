@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+BUCKET_LIST="InstanceScripts"
 FILE_LIST=()
 FILE_LIST+=('instancectl.bash')
 FILE_LIST+=('oci_cli_rc')
@@ -64,7 +65,7 @@ idiot_counter()
    done
 }
 
-OBJECT_LIST="$(oci os object list --all -bn InstanceScripts --query "data[].{name:name,md5:md5}")"
+OBJECT_LIST="$(oci os object list --all -bn "${BUCKET_LIST}" --query "data[].{name:name,md5:md5}")"
 
 UPTODATE="true"
 

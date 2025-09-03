@@ -53,13 +53,14 @@ SUBNET_NAME="public"
 #    can be one of 1, 2 or 3 in multi availability domain regions
 AVAILABILITY_DOMAIN_NUMBER="3"
 SSH_AUTHORIZED_KEYS_FILE="ssh_authorized_keys"
+BUCKET_NAME="InstanceScripts"
 
 # cd to the directory this script is in
 cd "$(dirname "$(realpath "$0")")"
 
 
 #######################################################################
-echo "### check if files in InstanceScripts bucket differ from local files"
+echo "### check if files in $BUCKET_NAME bucket differ from local files"
 FILE_LIST=()
 FILE_LIST+=('instancectl.bash')
 FILE_LIST+=('oci_cli_rc')
@@ -124,7 +125,7 @@ idiot_counter()
    done
 }
 
-OBJECT_LIST="$(oci os object list --all -bn InstanceScripts --query "data[].{name:name,md5:md5}")"
+OBJECT_LIST="$(oci os object list --all -bn "${BUCKET_NAME}" --query "data[].{name:name,md5:md5}")"
 
 UPTODATE="true"
 
