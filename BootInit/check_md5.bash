@@ -68,7 +68,8 @@ OBJECT_LIST="$(oci os object list --all -bn InstanceScripts --query "data[].{nam
 
 UPTODATE="true"
 
-for OBJECT_NAME in "${FILE_LIST[@]}"; do
+for FILE in "${FILE_LIST[@]}"; do
+  export OBJECT_NAME="${FILE}"
   OBJECT_MD5="$(echo $OBJECT_LIST|jq -r '.[] | select(.name==env.OBJECT_NAME).md5')"
   FILE_MD5="$(openssl dgst -md5 -binary "InstanceScripts/${OBJECT_NAME}" | base64)"
   #printf "%30s %s %s\n" "${OBJECT_NAME}" "${OBJECT_MD5}" "${FILE_MD5}"
