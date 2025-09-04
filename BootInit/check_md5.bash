@@ -82,9 +82,9 @@ for FILE in "${FILE_LIST[@]}"; do
   fi
 done
 
-if [[ "${UPTODATE}" != "true" ]]; then
-  printf "continue without uploading changed files to object storage ?\n"
-  idiot_counter
-  echo "continuing"
-fi
+#if [[ "${UPTODATE}" != "true" ]]; then
+#  printf "continue without uploading changed files to object storage ?\n"
+#  idiot_counter
+#  echo "continuing"
+#fi
 
