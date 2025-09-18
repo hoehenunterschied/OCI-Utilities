@@ -6,7 +6,7 @@ OCICLI_DIR="${HOME}/tmp/oracle-cli"
 # and muliple compartments with this name exist, the script
 # takes the first compartment returned by search
 COMPARTMENT_ID="ocid1.compartment.oc1..aaaaaaaaqfdeufdafms6trnedq6wnpwhwxnvynas6mqydvz7dsxciffyiana"
-COMPARTMENT_NAME="Ralf_lange"
+COMPARTMENT_NAME="Ralf_Lange"
 
 # when start or stop is given as the only parameter to
 # the script, the command is only applied to resources

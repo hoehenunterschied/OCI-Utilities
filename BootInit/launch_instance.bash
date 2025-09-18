@@ -17,12 +17,12 @@ NAME+=('new');  OS+=('Oracle Linux 10');      CPU+=('Ampere');
 #NAME+=('vivaldi');  OS+=('Oracle Linux 9'); CPU+=('AMD');
 #NAME+=('chopin');   OS+=('Oracle Linux 9'); CPU+=('AMD');
 
-#NAME+=('ol9arm1');        OS+=('Oracle Linux 9');      CPU+=('Ampere');
-#NAME+=('ol9arm2');        OS+=('Oracle Linux 9');      CPU+=('Ampere');
-#NAME+=('ol9arm3');        OS+=('Oracle Linux 9');      CPU+=('Ampere');
-#NAME+=('ol8arm1');        OS+=('Oracle Linux 8');      CPU+=('Ampere');
-#NAME+=('ol8arm2');        OS+=('Oracle Linux 8');      CPU+=('Ampere');
-#NAME+=('ol8arm3');        OS+=('Oracle Linux 8');      CPU+=('Ampere');
+NAME+=('ol9arm1');        OS+=('Oracle Linux 9');      CPU+=('Ampere');
+NAME+=('ol9arm2');        OS+=('Oracle Linux 9');      CPU+=('Ampere');
+NAME+=('ol9arm3');        OS+=('Oracle Linux 9');      CPU+=('Ampere');
+NAME+=('ol8arm1');        OS+=('Oracle Linux 8');      CPU+=('Ampere');
+NAME+=('ol8arm2');        OS+=('Oracle Linux 8');      CPU+=('Ampere');
+NAME+=('ol8arm3');        OS+=('Oracle Linux 8');      CPU+=('Ampere');
 #NAME+=('ol10arm1');       OS+=('Oracle Linux 10');     CPU+=('Ampere');
 #NAME+=('ol10arm2');       OS+=('Oracle Linux 10');     CPU+=('Ampere');
 #NAME+=('ol10arm3');       OS+=('Oracle Linux 10');     CPU+=('Ampere');
@@ -46,12 +46,12 @@ NAME+=('new');  OS+=('Oracle Linux 10');      CPU+=('Ampere');
 
 OCPUS="1.0"
 MEMORY_IN_GBS="6.0"
-COMPARTMENT_NAME="Ralf_lange"
+COMPARTMENT_NAME="Ralf_Lange"
 VCN_NAME="MainNet"
 SUBNET_NAME="public"
 # AVAILABILITY_DOMAIN_NUMBER must be 1 in single availability domain regions,
 #    can be one of 1, 2 or 3 in multi availability domain regions
-AVAILABILITY_DOMAIN_NUMBER="3"
+AVAILABILITY_DOMAIN_NUMBER="1"
 SSH_AUTHORIZED_KEYS_FILE="ssh_authorized_keys"
 BUCKET_NAME="InstanceScripts"
 
